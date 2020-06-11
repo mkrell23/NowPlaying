@@ -8,20 +8,24 @@ namespace NowPlaying
     // This class holds the methods for calling and working with APIs.
     class WebInteraction
     {
+        private static string _utellyKey;
+
+        static WebInteraction()
+        {
+            using (StreamReader utellykey = new StreamReader("UtellyKey.txt") )
+            {
+               _utellyKey = utellykey.ReadToEnd();
+            }
+        }
         
         public static void PrintUtellyKey()
         {
-            Console.WriteLine(WebInteraction.GetUtellyKey());
+            Console.WriteLine(WebInteraction._utellyKey);
         }
 
         private static string GetUtellyKey()
         {
-            string key;
-            using (StreamReader utellykey = new StreamReader("UtellyKey.txt") )
-            {
-               key = utellykey.ReadToEnd();
-            }
-            return key;
+            return _utellyKey;
         }
 
         public static IRestResponse SearchUtelly(string searchTerms)
@@ -40,8 +44,8 @@ namespace NowPlaying
         public static void SaveMovieToFile(string movie, string fileName)
         {
             var serializer = new JsonSerializer();
-            using (var writer = new StreamWriter(fileName))
-            using (var jsonWriter = new JsonTextWriter(writer))
+            using (StreamWriter writer = new StreamWriter(fileName))
+            using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
                 serializer.Serialize(writer, movie);
                
