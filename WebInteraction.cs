@@ -9,15 +9,17 @@ namespace NowPlaying
         
         public static void PrintUtellyKey()
         {
-            string key;
+            Console.WriteLine(WebInteraction.GetUtellyKey());
+        }
 
+        private static string GetUtellyKey()
+        {
+            string key;
             using (StreamReader utellykey = new StreamReader("UtellyKey.txt") )
             {
                key = utellykey.ReadToEnd();
             }
-
-            Console.WriteLine($"The key is {key}");
-            
+            return key;
         }
     }
 }
