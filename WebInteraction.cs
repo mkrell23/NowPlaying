@@ -23,11 +23,6 @@ namespace NowPlaying
             Console.WriteLine(WebInteraction._utellyKey);
         }
 
-        private static string GetUtellyKey()
-        {
-            return _utellyKey;
-        }
-
         public static IRestResponse SearchUtelly(string searchTerms)
         {
             var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup?term={searchTerms}&country=us");
