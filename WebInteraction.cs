@@ -33,15 +33,15 @@ namespace NowPlaying
             var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup?term={searchTerms}&country=us");
             var request = new RestRequest(Method.GET);
             request.AddHeader("x-rapidapi-host", "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com");
-            request.AddHeader("x-rapidapi-key", WebInteraction.GetUtellyKey());
+            request.AddHeader("x-rapidapi-key", WebInteraction._utellyKey);
             IRestResponse response = client.Execute(request);
 
             return response;
         }
 
 
-        //TODO: Move this to proper class
-        public static void SaveMovieToFile(string movie, string fileName)
+        //TODO: Move this to proper class?
+        public static void SaveMovieToFile(String movie, string fileName)
         {
             var serializer = new JsonSerializer();
             using (StreamWriter writer = new StreamWriter(fileName))
@@ -50,6 +50,25 @@ namespace NowPlaying
                 serializer.Serialize(writer, movie);
                
             }
+           
+        }
+
+        public static Movie ReadMovieInfo(String result)
+        {
+            Movie movie = new Movie();
+
+            using (var reader = new StreamReader(result))
+            {
+                string line = "";
+                while ((line = reader.ReadLine()) != null)
+                {
+                    string[] values = line.Split(',');
+
+                }
+            }
+
+
+            return movie;
         }
     }
 }

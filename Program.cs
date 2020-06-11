@@ -1,5 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using RestSharp;
 
 namespace NowPlaying
 {
@@ -8,12 +10,24 @@ namespace NowPlaying
         static void Main(string[] args)
         {
            var result = WebInteraction.SearchUtelly("bojack");
-            Console.WriteLine("Hello World!");
+           var content = JsonConvert.DeserializeObject<String>(result.Content);
+           var movie = Movie.FromJson(result.Content);
+
+         
+     
+        //    Movie bojack = WebInteraction.ReadMovieInfo(movie2.);
+        //    var bojack = Movie.DeserializeMovie(content);
+
+        //    JToken token = JToken.Parse(result.Content);
+        //    JObject json = JObject.Parse( token);
+             
+            
+            WebInteraction.ReadMovieInfo(content);
+
+          WebInteraction.SaveMovieToFile(content, "bojack.json") ; 
             WebInteraction.PrintUtellyKey();
-
-            string bojack = JsonConvert.DeserializeObject(result.Content).ToString();
-
-          WebInteraction.SaveMovieToFile(bojack, "bojack.json") ; 
+            Console.WriteLine("Hello World!");
+  
         }
     }
 }
