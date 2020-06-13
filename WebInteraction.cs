@@ -10,6 +10,8 @@ namespace NowPlaying
     {
         private static string _utellyKey;
 
+        //Initializes the API key in the UtellyKey file into the class
+
         static WebInteraction()
         {
             using (StreamReader utellykey = new StreamReader("UtellyKey.txt") )

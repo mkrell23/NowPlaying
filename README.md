@@ -11,3 +11,5 @@ Searches for what (if any) streaming provider is serving a given movie and displ
 * Gets a synopsis and critic aggregate score for the movie.
 * Displays the provider of the movie in the console with the rating and synopsis.
 * Saves to text file?
+
+User needs a key for the Utelly API, saved in a file called UtellyKey.txt
