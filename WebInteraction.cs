@@ -70,9 +70,9 @@ namespace NowPlaying
            
         }
 
-        public static Movie ReadMovieInfo(String result)
+        public static UtellyResult ReadMovieInfo(String result)
         {
-            Movie movie = new Movie();
+            UtellyResult movie = new UtellyResult();
 
             using (var reader = new StreamReader(result))
             {

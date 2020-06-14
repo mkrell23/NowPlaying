@@ -37,9 +37,14 @@ namespace NowPlaying
             UserInteraction.MainMenu();
             var movieChoice = Console.ReadLine();
 
-            var result = WebInteraction.SearchOmdb(movieChoice);
+            var result = WebInteraction.SearchUtelly(movieChoice);
 
-            var content = JsonConvert.DeserializeObject<JObject>(result);
+            UtellyResult searchedMovie = UtellyResult.FromJson(result.Content);
+
+            var noop = searchedMovie.Results;
+
+            var q = searchedMovie.Results[0].Locations[0].Url;
+
 
 
             //THIS IS HACKY AND BAD
