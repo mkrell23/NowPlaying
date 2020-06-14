@@ -24,57 +24,31 @@ namespace NowPlaying
             //     movieChoice = UserInteraction.MainMenu();
             // }
 
-            //THIS IS WHAT WAS "WORKING"
-
-            // UserInteraction.MainMenu();
-            // var movieChoice = Console.ReadLine();
-
-            // var result = WebInteraction.SearchUtelly(movieChoice);
-
-            // var normal = result.Content.Normalize();
-            // var content = JsonConvert.DeserializeObject<JObject>(result.Content);
-
             UserInteraction.MainMenu();
+
             var movieChoice = Console.ReadLine();
 
-            var result = WebInteraction.SearchUtelly(movieChoice);
 
-            UtellyResult searchedMovie = UtellyResult.FromJson(result.Content);
+            var rawUtellyResult = WebInteraction.SearchUtelly(movieChoice);
 
-            var noop = searchedMovie.Results;
+            UtellyResult utellyResultConv = UtellyResult.FromJson(rawUtellyResult.Content);
 
-            var q = searchedMovie.Results[0].Locations[0].Url;
+            var utellyMovie = utellyResultConv.Results;
+
+            var pic = utellyMovie[0].Picture;
+
+            var url = utellyMovie[0].Locations[0].Url;
 
 
+            var rawOmbResult = WebInteraction.SearchOmdb(movieChoice);
 
-            //THIS IS HACKY AND BAD
+            OmdbResult convertedOmb = OmdbResult.FromJson(rawOmbResult);
 
-            // var frankenstein = JToken.Parse(content);
+            var r = convertedOmb.Title;
 
-            // foreach (KeyValuePair<string, JToken> subContent in (JObject)content[0])
-            // {
-            //     Console.WriteLine(subContent.Key);
-            // }
-
-            
 
             WebInteraction.PrintKeys();
             Console.WriteLine("Hello World!");
-
-         //I DON'T EVEN REMEMBER IF THIS WORKED AT ALL
-
-            //    var movie = Movie.FromJson(result.Content);
-     
-        // //    Movie bojack = WebInteraction.ReadMovieInfo(movie.);
-        // //    var bojack = Movie.DeserializeMovie(content);
-
-        // //    JToken token = JToken.Parse(result.Content);
-        // //    JObject json = JObject.Parse( token);
-             
-            
-        //     WebInteraction.ReadMovieInfo(content);
-
-        //   WebInteraction.SaveMovieToFile(content, "bojack.json") ; 
 
             return 0;
         }
