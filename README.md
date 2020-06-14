@@ -12,4 +12,4 @@ Searches for what (if any) streaming provider is serving a given movie and displ
 * Displays the provider of the movie in the console with the rating and synopsis.
 * Saves to text file?
 
-User needs a key for the Utelly API, saved in a file called UtellyKey.txt
+User needs a key for the APIs used, saved in a text file. See the gitignore or WebInteraction code for details.
