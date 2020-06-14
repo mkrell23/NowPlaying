@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -23,23 +24,41 @@ namespace NowPlaying
             //     movieChoice = UserInteraction.MainMenu();
             // }
 
+            //THIS IS WHAT WAS "WORKING"
+
+            // UserInteraction.MainMenu();
+            // var movieChoice = Console.ReadLine();
+
+            // var result = WebInteraction.SearchUtelly(movieChoice);
+
+            // var normal = result.Content.Normalize();
+            // var content = JsonConvert.DeserializeObject<JObject>(result.Content);
+
             UserInteraction.MainMenu();
             var movieChoice = Console.ReadLine();
 
-            
-            // UserInteraction.MainMenu();
-            // string selection = Console.ReadLine();
-            // Console.WriteLine($"You picked {selection}");
-            
-            var result = WebInteraction.SearchUtelly(movieChoice);
-            var content = JsonConvert.DeserializeObject(result.Content);
+            var result = WebInteraction.SearchOmdb(movieChoice);
 
-            WebInteraction.PrintUtellyKey();
+            var content = JsonConvert.DeserializeObject<JObject>(result);
+
+
+            //THIS IS HACKY AND BAD
+
+            // var frankenstein = JToken.Parse(content);
+
+            // foreach (KeyValuePair<string, JToken> subContent in (JObject)content[0])
+            // {
+            //     Console.WriteLine(subContent.Key);
+            // }
+
+            
+
+            WebInteraction.PrintKeys();
             Console.WriteLine("Hello World!");
 
-            //    var movie = Movie.FromJson(result.Content);
+         //I DON'T EVEN REMEMBER IF THIS WORKED AT ALL
 
-         
+            //    var movie = Movie.FromJson(result.Content);
      
         // //    Movie bojack = WebInteraction.ReadMovieInfo(movie.);
         // //    var bojack = Movie.DeserializeMovie(content);

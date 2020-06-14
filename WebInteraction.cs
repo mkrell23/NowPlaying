@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Net;
+using System.Web;
 
 namespace NowPlaying
 {
@@ -9,20 +11,24 @@ namespace NowPlaying
     class WebInteraction
     {
         private static string _utellyKey;
+        private static string _omdbKey;
 
-        //Initializes the API key in the UtellyKey file into the class
+        //Initializes the API keys in the Key files into the class
 
         static WebInteraction()
         {
             using (StreamReader utellykey = new StreamReader("UtellyKey.txt") )
+            using (StreamReader omdbkey = new StreamReader("OmdbKey.txt") )
             {
                _utellyKey = utellykey.ReadToEnd();
+               _omdbKey = omdbkey.ReadToEnd();
             }
         }
         
-        public static void PrintUtellyKey()
+        public static void PrintKeys()
         {
-            Console.WriteLine(WebInteraction._utellyKey);
+            Console.WriteLine( "Utelly Key: " + WebInteraction._utellyKey);
+            Console.WriteLine( "OMDB Key: " + WebInteraction._omdbKey);
         }
 
         public static IRestResponse SearchUtelly(string searchTerms)
@@ -32,6 +38,20 @@ namespace NowPlaying
             request.AddHeader("x-rapidapi-host", "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com");
             request.AddHeader("x-rapidapi-key", WebInteraction._utellyKey);
             IRestResponse response = client.Execute(request);
+
+            return response;
+        }
+
+        public static string SearchOmdb(string searchTerms)
+        {
+            string response = "";
+            string url = $"http://www.omdbapi.com/?apikey={_omdbKey}&t={HttpUtility.UrlEncode(searchTerms)}";
+
+            using (WebClient wc = new WebClient())
+            {
+               response = wc.DownloadString(url);
+            }
+            
 
             return response;
         }

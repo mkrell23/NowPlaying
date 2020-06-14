@@ -11,10 +11,13 @@
     <PackageReference Include="RestSharp" Version="106.6.10" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
       <None Update="UtellyKey.txt">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-  </ItemGroup>
+      <None Update="OmdbKey.txt">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+  </ItemGroup> -->
 
 </Project>
