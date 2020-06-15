@@ -44,6 +44,19 @@ namespace NowPlaying
             return utellyResultConv.Results;
         }
 
+        public static Result[] SearchUtellyById(string searchTerms)
+        {
+            var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup?country=US&source_id={searchTerms}&source=imdb");
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("x-rapidapi-host", "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com");
+            request.AddHeader("x-rapidapi-key", WebInteraction._utellyKey);
+            IRestResponse response = client.Execute(request);
+
+            UtellyResult utellyResultConv = UtellyResult.FromJson(response.Content);
+
+            return utellyResultConv.Results;
+        }
+
         public static OmdbResult SearchOmdbForTitle(string searchTerms)
         {
             string response = "";
