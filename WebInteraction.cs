@@ -44,7 +44,7 @@ namespace NowPlaying
             return utellyResultConv.Results;
         }
 
-        public static OmdbResult SearchOmdb(string searchTerms)
+        public static OmdbResult SearchOmdbForTitle(string searchTerms)
         {
             string response = "";
             string url = $"http://www.omdbapi.com/?apikey={_omdbKey}&t={HttpUtility.UrlEncode(searchTerms)}";
@@ -53,8 +53,37 @@ namespace NowPlaying
             {
                response = wc.DownloadString(url);
             }
-           
-            return OmdbResult.FromJson(response);          
+            
+            var result = OmdbResult.FromJson(response);
+            return result;
+        }
+
+        public static Search[] SearchOmdbByString(string searchTerms)
+        {
+            string response = "";
+            string url = $"http://www.omdbapi.com/?apikey={_omdbKey}&s={HttpUtility.UrlEncode(searchTerms)}";
+
+            using (WebClient wc = new WebClient())
+            {
+               response = wc.DownloadString(url);
+            }
+            
+            var result = OmdbSearchByString.FromJson(response);
+            return result.Search;
+        }
+
+        public static OmdbResult SearchOmdbForId(string searchTerms)
+        {
+            string response = "";
+            string url = $"http://www.omdbapi.com/?apikey={_omdbKey}&i={HttpUtility.UrlEncode(searchTerms)}";
+
+            using (WebClient wc = new WebClient())
+            {
+               response = wc.DownloadString(url);
+            }
+            
+            var result = OmdbResult.FromJson(response);
+            return result;
         }
 
 

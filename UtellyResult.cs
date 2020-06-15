@@ -121,6 +121,7 @@ namespace NowPlaying
     {
         public static string ToJson(this OmdbResult self) => JsonConvert.SerializeObject(self, NowPlaying.Converter.Settings);
         public static string ToJson(this UtellyResult self) => JsonConvert.SerializeObject(self, NowPlaying.Converter.Settings);
+        public static string ToJson(this OmdbSearchByString self) => JsonConvert.SerializeObject(self, NowPlaying.Converter.Settings);
     }
 
     internal static class Converter

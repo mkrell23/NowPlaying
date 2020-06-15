@@ -25,18 +25,25 @@ namespace NowPlaying
 
             UserInteraction.MainMenu();
             var movieChoice = Console.ReadLine();
-
+            
 
             Result[] utellyMovie = WebInteraction.SearchUtelly(movieChoice);
 
             var pic = utellyMovie[0].Picture;
             var url = utellyMovie[0].Locations[0].Url;
 
+            // foreach (var result in utellyMovie)
+            // {
+            //     result.
+            // }
 
-            OmdbResult CorrectOmdbResult = WebInteraction.SearchOmdb(movieChoice); 
 
-            var r = CorrectOmdbResult.Title;
+            OmdbResult omResult = WebInteraction.SearchOmdbForTitle(movieChoice); 
+            Search[] otherOm = WebInteraction.SearchOmdbByString(movieChoice);
 
+            var r = omResult.Type;
+
+            var whazit = otherOm[0].Title;
 
             WebInteraction.PrintKeys();
             Console.WriteLine("Hello World!");

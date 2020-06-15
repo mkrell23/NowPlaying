@@ -9,6 +9,7 @@ using Newtonsoft.Json.Converters;
 namespace NowPlaying
 {
 
+    //Parses when the search type is T
     public partial class OmdbResult
     {
         [JsonProperty("Title")]
@@ -88,11 +89,82 @@ namespace NowPlaying
         public string Value { get; set; }
     }
 
+//Parses when the search is String and returns multiple values in array
+    public partial class OmdbSearchByString
+    {
+        [JsonProperty("Search")]
+        public Search[] Search { get; set; }
+
+        [JsonProperty("totalResults")]
+        [JsonConverter(typeof(ParseStringConverter))]
+        public long TotalResults { get; set; }
+
+        [JsonProperty("Response")]
+        public string Response { get; set; }
+    }
+
+    public partial class Search
+    {
+        [JsonProperty("Title")]
+        public string Title { get; set; }
+
+        [JsonProperty("Year")]
+        [JsonConverter(typeof(ParseStringConverter))]
+        public long Year { get; set; }
+
+        [JsonProperty("imdbID")]
+        public string ImdbId { get; set; }
+
+        [JsonProperty("Type")]
+        public TypeEnum Type { get; set; }
+
+        [JsonProperty("Poster")]
+        public Uri Poster { get; set; }
+    }
+
+    public enum TypeEnum { Movie };
+
+    public partial class OmdbSearchByString
+    {
+        public static OmdbSearchByString FromJson(string json) => JsonConvert.DeserializeObject<OmdbSearchByString>(json, NowPlaying.Converter.Settings);
+    }
+
+    internal class TypeEnumConverter : JsonConverter
+    {
+        public override bool CanConvert(Type t) => t == typeof(TypeEnum) || t == typeof(TypeEnum?);
+
+        public override object ReadJson(JsonReader reader, Type t, object existingValue, JsonSerializer serializer)
+        {
+            if (reader.TokenType == JsonToken.Null) return null;
+            var value = serializer.Deserialize<string>(reader);
+            if (value == "movie")
+            {
+                return TypeEnum.Movie;
+            }
+            throw new Exception("Cannot unmarshal type TypeEnum");
+        }
+
+        public override void WriteJson(JsonWriter writer, object untypedValue, JsonSerializer serializer)
+        {
+            if (untypedValue == null)
+            {
+                serializer.Serialize(writer, null);
+                return;
+            }
+            var value = (TypeEnum)untypedValue;
+            if (value == TypeEnum.Movie)
+            {
+                serializer.Serialize(writer, "movie");
+                return;
+            }
+            throw new Exception("Cannot marshal type TypeEnum");
+        }
+
+        public static readonly TypeEnumConverter Singleton = new TypeEnumConverter();
+    }
+
     public partial class OmdbResult
     {
         public static OmdbResult FromJson(string json) => JsonConvert.DeserializeObject<OmdbResult>(json, NowPlaying.Converter.Settings);
-    }
-
-    
-    
+    } 
 }
