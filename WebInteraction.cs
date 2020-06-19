@@ -110,23 +110,5 @@ namespace NowPlaying
                 serializer.Serialize(writer, movie);               
             }          
         }
-
-//This got borked in an auto refactor when the original Movie class got moved to the UtellyResult class.
-//What did this do? I'll need to recreate it's purported functionality anyway.
-
-        // public static UtellyResult ReadMovieInfo(String result)
-        // {
-        //     UtellyResult movie = new UtellyResult();
-
-        //     using (var reader = new StreamReader(result))
-        //     {
-        //         string line = "";
-        //         while ((line = reader.ReadLine()) != null)
-        //         {
-        //             string[] values = line.Split(',');
-        //         }
-        //     }
-        //     return movie;
-        // }
     }
 }

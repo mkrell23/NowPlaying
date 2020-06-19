@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace NowPlaying
 {
@@ -52,5 +54,23 @@ Type the name of the movie you want to search for:
 ");
         }
 
+        public static void DisplayResults(string movieChoice, List<Movie> userSearch)
+        {
+            Console.Clear();
+            StringBuilder display = new StringBuilder($"You searched for {movieChoice}.\r\n\r\nResults:");
+
+            for (int i = 0; i < userSearch.Count; i++)
+            {
+                display.AppendFormat($"\r\n\r\n[{i+1}]: {userSearch[i].Title}, directed by {userSearch[i].Director}. MPAA Rating: {userSearch[i].Rated}\r\n\t{userSearch[i].Plot}\r\n\tStarring: {userSearch[i].Actors}\r\n\tCritic Ratings: ");
+                // Stricken line, after director: , in {userSearch[i].Year}
+                foreach (var rating in userSearch[i].Ratings)
+                {
+                    display.AppendFormat($"\r\n\t\t{rating.Source}, {rating.Value}");
+                    
+                }
+            }
+
+            Console.WriteLine(display + "\r\n\r\n");
+        }
     }
 }
