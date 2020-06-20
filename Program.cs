@@ -63,7 +63,7 @@ namespace NowPlaying
                 {
                     Title = result.Title, 
                     ImdbId = result.ImdbId, 
-                    //Year = (int)result.Year,
+                    Year = result.Year,
                     Poster = result.Poster,
                     Actors = newResults.Actors,
                     Director = newResults.Director,

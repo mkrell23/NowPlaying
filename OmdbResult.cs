@@ -73,8 +73,7 @@ namespace NowPlaying
         public string Type { get; set; }
 
         [JsonProperty("totalSeasons")]
-        [JsonConverter(typeof(ParseStringConverter))]
-        public long TotalSeasons { get; set; }
+        public string TotalSeasons { get; set; }
 
         [JsonProperty("Response")]
         public string Response { get; set; }
@@ -109,14 +108,13 @@ namespace NowPlaying
         public string Title { get; set; }
 
         [JsonProperty("Year")]
-        [JsonConverter(typeof(ParseStringConverter))]
-        public long Year { get; set; }
+        public string Year { get; set; }
 
         [JsonProperty("imdbID")]
         public string ImdbId { get; set; }
 
         [JsonProperty("Type")]
-        public TypeEnum Type { get; set; }
+        public string Type { get; set; }
 
         [JsonProperty("Poster")]
         public Uri Poster { get; set; }

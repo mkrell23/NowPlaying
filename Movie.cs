@@ -6,7 +6,7 @@ namespace NowPlaying
     public class Movie
     {
         public string Title { get; set; }
-        public int Year { get; set; }
+        public string Year { get; set; }
         public string Rated { get; set; } 
         public string Plot { get; set; }
         public string Director { get; set; } 
