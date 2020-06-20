@@ -32,7 +32,8 @@ Press the ESC key at any tme to exit");
 
         }
 
-        public static void MainMenu()
+        // Gets something to search for
+        public static string GetSearchFromUser()
         {
             Console.WriteLine(@"
 .__   __.   ______   ____    __    ____ 
@@ -52,12 +53,14 @@ __________________________________________________________________
 
 Type the name of the movie you want to search for:
 ");
+            return Console.ReadLine();
         }
 
-        public static void DisplayResults(string movieChoice, List<Movie> userSearch)
+        // Displays results to user, prompts for selection, and returns IMDB number for movie
+        public static string DisplayAndReturnSelection(string movieChoice, List<Movie> userSearch)
         {
             Console.Clear();
-            StringBuilder display = new StringBuilder($"You searched for {movieChoice}.\r\n\r\nFirst Ten Results:");
+            StringBuilder display = new StringBuilder($"You searched for {movieChoice}.");
 
             for (int i = 0; i < userSearch.Count; i++)
             {
@@ -86,7 +89,35 @@ Type the name of the movie you want to search for:
             }
 
             Console.WriteLine(display + "\r\n\r\n");
-            Console.ReadLine();
+    
+            int userSelection =  UserPicksResult(userSearch);
+
+            return userSearch[userSelection].ImdbId;
         }
+
+        // Helper method to get and return user input to select proper result
+        public static int UserPicksResult(List<Movie> userSearch)
+        {
+            int userSelect = -1;
+            int userNumber;
+            Console.WriteLine("Please type the number of the result you'd like to select:");
+            try
+            {
+                    userNumber = int.Parse(Console.ReadLine());
+                    userSelect = userNumber - 1;
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            // if (int.TryParse(rawNumber, out userNumber))
+            // {
+            //     userSelect = userNumber - 1;
+            // }
+            
+            return userSelect;
+        }
+
+
     }
 }

@@ -88,7 +88,7 @@ namespace NowPlaying
         public static OmdbResult SearchOmdbForId(string searchTerms)
         {
             string response = "";
-            string url = $"http://www.omdbapi.com/?apikey={_omdbKey}&i={HttpUtility.UrlEncode(searchTerms)}";
+            string url = $"http://www.omdbapi.com/?apikey={_omdbKey}&i={searchTerms}";
 
             using (WebClient wc = new WebClient())
             {

@@ -22,15 +22,19 @@ namespace NowPlaying
             // }
 
             List<Movie> userSearch = new List<Movie>();
-
-            UserInteraction.MainMenu();
-            var movieChoice = Console.ReadLine();
-
+            
+            var movieChoice = UserInteraction.GetSearchFromUser();
             Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
 
             userSearch = ParseThroughOmdbResults(OmdbSearchResults);
 
-            UserInteraction.DisplayResults(movieChoice, userSearch);
+            var selectedId = UserInteraction.DisplayAndReturnSelection(movieChoice, userSearch);
+
+            Result[] oneToStream = WebInteraction.SearchUtellyById(selectedId);
+
+            var wTF = WebInteraction.SearchUtellyById("tt0417299");
+
+            // Console.WriteLine(oneToStream[0].Locations[0].Url);
 
             //OmdbResult omResult = WebInteraction.SearchOmdbForTitle(movieChoice);
 
@@ -38,8 +42,8 @@ namespace NowPlaying
             // var r = omResult.Type;
             // var whazit = OmdbSearchResults[0].Title;
 
-            // Result[] utellyMovie = WebInteraction.SearchUtelly(movieChoice);
-
+            Result[] utellyMovie = WebInteraction.SearchUtelly(movieChoice);
+            var pleaseHelpMe = WebInteraction.SearchUtellyById(utellyMovie[0].ExternalIds.Imdb.Id);
             // var pic = utellyMovie[0].Picture;
             // var url = utellyMovie[0].Locations[0].Url;
             // var ugh = utellyMovie[0].Locations[0].Name;
