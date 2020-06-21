@@ -25,6 +25,7 @@ namespace NowPlaying
             }
         }
         
+        // This is a test method to make sure I'm getting the proper value
         public static void PrintKeys()
         {
             Console.WriteLine( "Utelly Key: " + WebInteraction._utellyKey);
@@ -44,7 +45,7 @@ namespace NowPlaying
             return utellyResultConv.Results;
         }
 
-        public static Result[] SearchUtellyById(string searchTerms)
+        public static UtellyResultById.Collection SearchUtellyById(string searchTerms)
         {
             var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup?country=US&source_id={searchTerms}&source=imdb");
             var request = new RestRequest(Method.GET);
@@ -52,9 +53,9 @@ namespace NowPlaying
             request.AddHeader("x-rapidapi-key", WebInteraction._utellyKey);
             IRestResponse response = client.Execute(request);
 
-            UtellyResult utellyResultConv = UtellyResult.FromJson(response.Content);
+            UtellyResultById utellyResultConv = UtellyResultById.FromJson(response.Content);
 
-            return utellyResultConv.Results;
+            return utellyResultConv.collection;
         }
 
         public static OmdbResult SearchOmdbForTitle(string searchTerms)
@@ -98,7 +99,6 @@ namespace NowPlaying
             var result = OmdbResult.FromJson(response);
             return result;
         }
-
 
         //TODO: Move this to proper class?
         public static void SaveMovieToFile(String movie, string fileName)

@@ -90,13 +90,53 @@ Type the name of the movie you want to search for:
 
             Console.WriteLine(display + "\r\n\r\n");
     
-            int userSelection =  UserPicksResult(userSearch);
+            int userSelection =  UserPicksResult();
 
             return userSearch[userSelection].ImdbId;
         }
 
+        public static string DisplayAndReturnSelection(string movieChoice, Result[] userSearch)
+        {
+            Console.Clear();
+            StringBuilder display = new StringBuilder($"You searched for {movieChoice}.");
+
+            for (int i = 0; i < userSearch.Length; i++)
+            {
+                display.AppendFormat($"\r\n\r\n[{i+1}]: {userSearch[i].Name}");
+            }
+
+            Console.WriteLine(display + "\r\n\r\n");
+    
+            int userSelection =  UserPicksResult();
+
+            return userSearch[userSelection].ExternalIds.Imdb.Id;
+        }
+
         // Helper method to get and return user input to select proper result
-        public static int UserPicksResult(List<Movie> userSearch)
+
+        // public static int UserPicksResult(List<Movie> userSearch)
+        // {
+        //     int userSelect = -1;
+        //     int userNumber;
+        //     Console.WriteLine("Please type the number of the result you'd like to select:");
+        //     try
+        //     {
+        //             userNumber = int.Parse(Console.ReadLine());
+        //             userSelect = userNumber - 1;
+        //     }
+        //     catch (FormatException e)
+        //     {
+        //         Console.WriteLine(e.Message);
+        //     }
+        //     // if (int.TryParse(rawNumber, out userNumber))
+        //     // {
+        //     //     userSelect = userNumber - 1;
+        //     // }
+            
+        //     return userSelect;
+        // }
+
+        public static int UserPicksResult()
         {
             int userSelect = -1;
             int userNumber;
@@ -118,6 +158,29 @@ Type the name of the movie you want to search for:
             return userSelect;
         }
 
+        public static void DisplayStreamingLocations(UtellyResultById.Collection resultToDisplay)
+        {
+            Console.Clear();
+            StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
+            foreach (var location in resultToDisplay.Locations)
+            {
+                display.AppendFormat($"\r\n\r\n\t{location.Name}\r\n\t{location.Url}");
+            }
 
+            Console.WriteLine(display);
+        }
+
+        // public static void DisplayStreamingLocations(Result[] resultToDisplay)
+        // {
+        //     StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
+        //     foreach (var location in resultToDisplay.Locations)
+        //     {
+        //         display.AppendFormat($"\r\n\t{location.Name}\r\n\t{location.Url}");
+        //     }
+
+        //     Console.WriteLine(display);
+        // }
+
+        
     }
 }

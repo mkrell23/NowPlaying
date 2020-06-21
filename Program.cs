@@ -24,31 +24,31 @@ namespace NowPlaying
             List<Movie> userSearch = new List<Movie>();
             
             var movieChoice = UserInteraction.GetSearchFromUser();
-            Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
 
-            userSearch = ParseThroughOmdbResults(OmdbSearchResults);
+            
+            
+        // Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
 
-            var selectedId = UserInteraction.DisplayAndReturnSelection(movieChoice, userSearch);
+        // userSearch = ParseThroughOmdbResults(OmdbSearchResults);
 
-            Result[] oneToStream = WebInteraction.SearchUtellyById(selectedId);
+        // var selectedId = UserInteraction.DisplayAndReturnSelection(movieChoice, userSearch);
 
-            var wTF = WebInteraction.SearchUtellyById("tt0417299");
+        // UtellyResultById.Collection oneToStream = WebInteraction.SearchUtellyById(selectedId);
 
-            // Console.WriteLine(oneToStream[0].Locations[0].Url);
+        // UserInteraction.DisplayStreamingLocations(oneToStream);
 
-            //OmdbResult omResult = WebInteraction.SearchOmdbForTitle(movieChoice);
+        // var address =  oneToStream.Locations[0].Url;
 
-            // var hu = userSearch[0];
-            // var r = omResult.Type;
-            // var whazit = OmdbSearchResults[0].Title;
 
-            Result[] utellyMovie = WebInteraction.SearchUtelly(movieChoice);
-            var pleaseHelpMe = WebInteraction.SearchUtellyById(utellyMovie[0].ExternalIds.Imdb.Id);
-            // var pic = utellyMovie[0].Picture;
-            // var url = utellyMovie[0].Locations[0].Url;
-            // var ugh = utellyMovie[0].Locations[0].Name;
 
-            // userSearch = ParseThroughUtellyResults(utellyMovie);
+                    Result[] results = WebInteraction.SearchUtelly(movieChoice);
+
+                    var getAnImdbId = UserInteraction.DisplayAndReturnSelection(movieChoice, results);
+
+                    var finalResult = WebInteraction.SearchUtellyById(getAnImdbId);
+
+                    UserInteraction.DisplayStreamingLocations(finalResult);
+
 
 
             WebInteraction.PrintKeys();
@@ -78,7 +78,7 @@ namespace NowPlaying
                     Ratings = newResults.Ratings,
                 };
                 userSearch.Add(movie);
-                Task.Delay(600);  
+                //Task.Delay(1200);  
             }
 
             return userSearch;
