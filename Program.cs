@@ -24,32 +24,25 @@ namespace NowPlaying
             List<Movie> userSearch = new List<Movie>();
             
             var movieChoice = UserInteraction.GetSearchFromUser();
-
             
-            
-        // Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
+            Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
 
-        // userSearch = ParseThroughOmdbResults(OmdbSearchResults);
+            userSearch = CreateOmdbListOfResults(OmdbSearchResults);
 
-        // var selectedId = UserInteraction.DisplayAndReturnSelection(movieChoice, userSearch);
+            var selectedId = UserInteraction.DisplayAndReturnSelection(movieChoice, userSearch);
 
-        // UtellyResultById.Collection oneToStream = WebInteraction.SearchUtellyById(selectedId);
+            var oneToStream = WebInteraction.SearchUtellyById(selectedId);
 
-        // UserInteraction.DisplayStreamingLocations(oneToStream);
+            UserInteraction.DisplayStreamingLocations(oneToStream);
 
-        // var address =  oneToStream.Locations[0].Url;
+                    // // This code searches and displays only utelly
+                    // Result[] results = WebInteraction.SearchUtelly(movieChoice);
 
+                    // var getAnImdbId = UserInteraction.DisplayAndReturnSelection(movieChoice, results);
 
+                    // var finalResult = WebInteraction.SearchUtellyById(getAnImdbId);
 
-                    Result[] results = WebInteraction.SearchUtelly(movieChoice);
-
-                    var getAnImdbId = UserInteraction.DisplayAndReturnSelection(movieChoice, results);
-
-                    var finalResult = WebInteraction.SearchUtellyById(getAnImdbId);
-
-                    UserInteraction.DisplayStreamingLocations(finalResult);
-
-
+                    // UserInteraction.DisplayStreamingLocations(finalResult);
 
             WebInteraction.PrintKeys();
             Console.WriteLine("Hello World!");
@@ -57,7 +50,7 @@ namespace NowPlaying
             return 0;
         }
 
-        static List<Movie> ParseThroughOmdbResults(Search[] results)
+        static List<Movie> CreateOmdbListOfResults(Search[] results)
         {
             List<Movie> userSearch = new List<Movie>();
             foreach (var result in results)
@@ -78,38 +71,38 @@ namespace NowPlaying
                     Ratings = newResults.Ratings,
                 };
                 userSearch.Add(movie);
-                //Task.Delay(1200);  
+                Task.Delay(1200);  
             }
 
             return userSearch;
         }
 
 
-        //PROBLEM: How to add Location[] to movie???
-        //APPROACH: use other search (results are better anyway), pick result, call utelly to get providers
-        static List<Movie> ParseThroughUtellyResults(Result[] results)
-        {
-            //NONE OF THIS IS WORKING :sad:
-            List<Movie> userSearch = new List<Movie>();
-            foreach (var result in results)
-            {
-                Movie movie = new Movie
-                {
-                    Title = result.Name,
-                    ImdbId = result.Id
-                };
+        // //PROBLEM: How to add Location[] to movie???
+        // //APPROACH: use other search (results are better anyway), pick result, call utelly to get providers
+        // static List<Movie> ParseThroughUtellyResults(Result[] results)
+        // {
+        //     //NONE OF THIS IS WORKING :sad:
+        //     List<Movie> userSearch = new List<Movie>();
+        //     foreach (var result in results)
+        //     {
+        //         Movie movie = new Movie
+        //         {
+        //             Title = result.Name,
+        //             ImdbId = result.Id
+        //         };
 
-                // movie.locations[] = Array.CreateInstance(string, 4);
-                // Array.Copy(result.Locations, movie.Locations, 3);
+        //         // movie.locations[] = Array.CreateInstance(string, 4);
+        //         // Array.Copy(result.Locations, movie.Locations, 3);
 
                 
-                // foreach (var provider in Locations)
-                // {
-                //     movie.
-                // }
-            }
+        //         // foreach (var provider in Locations)
+        //         // {
+        //         //     movie.
+        //         // }
+        //     }
 
-            return userSearch;
-        }
+        //     return userSearch;
+        // }
     }
 }
