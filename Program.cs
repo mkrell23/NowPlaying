@@ -8,6 +8,9 @@ namespace NowPlaying
     {
         static int Main(string[] args)
         {
+
+          // MAIN LOOP GOES HERE IN THE FUTURE
+
             // UserInteraction.DisplayWelcome();
             
             // var selection = Console.ReadKey();
@@ -24,7 +27,7 @@ namespace NowPlaying
             List<Movie> userSearch = new List<Movie>();
             
             var movieChoice = UserInteraction.GetSearchFromUser();
-            
+        
             Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
 
             userSearch = CreateOmdbListOfResults(OmdbSearchResults);
@@ -35,74 +38,40 @@ namespace NowPlaying
 
             UserInteraction.DisplayStreamingLocations(oneToStream);
 
-                    // // This code searches and displays only utelly
-                    // Result[] results = WebInteraction.SearchUtelly(movieChoice);
-
-                    // var getAnImdbId = UserInteraction.DisplayAndReturnSelection(movieChoice, results);
-
-                    // var finalResult = WebInteraction.SearchUtellyById(getAnImdbId);
-
-                    // UserInteraction.DisplayStreamingLocations(finalResult);
-
+            //This is a handy spot to put a breakpoint for now because currently there is no graceful exit
             WebInteraction.PrintKeys();
-            Console.WriteLine("Hello World!");
 
             return 0;
         }
 
+        // Generates the intial list of movies/shows we'll be using later to pick a result
         static List<Movie> CreateOmdbListOfResults(Search[] results)
         {
             List<Movie> userSearch = new List<Movie>();
             foreach (var result in results)
             {
-                var newResults = WebInteraction.SearchOmdbForId(result.ImdbId);
-                Movie movie = new Movie
-                {
-                    Title = result.Title, 
-                    ImdbId = result.ImdbId, 
-                    Year = result.Year,
-                    Poster = result.Poster,
-                    Actors = newResults.Actors,
-                    Director = newResults.Director,
-                    ImdbRating = newResults.ImdbRating,
-                    Metascore = newResults.Metascore,
-                    Plot = newResults.Plot,
-                    Rated =  newResults.Rated,
-                    Ratings = newResults.Ratings,
-                };
-                userSearch.Add(movie);
-                Task.Delay(1200);  
+                if(result.Type != "game") // This prevents nonsense results later
+                {    
+                    var newResults = WebInteraction.SearchOmdbForId(result.ImdbId);
+                    Movie movie = new Movie
+                    {
+                        Title = result.Title, 
+                        ImdbId = result.ImdbId, 
+                        Year = result.Year,
+                        Poster = result.Poster,
+                        Actors = newResults.Actors,
+                        Director = newResults.Director,
+                        ImdbRating = newResults.ImdbRating,
+                        Metascore = newResults.Metascore,
+                        Plot = newResults.Plot,
+                        Rated =  newResults.Rated,
+                        Ratings = newResults.Ratings,
+                    };
+                    userSearch.Add(movie);
+                    Task.Delay(1200); //OMDB does not like getting hammered
+                }
             }
-
             return userSearch;
         }
-
-
-        // //PROBLEM: How to add Location[] to movie???
-        // //APPROACH: use other search (results are better anyway), pick result, call utelly to get providers
-        // static List<Movie> ParseThroughUtellyResults(Result[] results)
-        // {
-        //     //NONE OF THIS IS WORKING :sad:
-        //     List<Movie> userSearch = new List<Movie>();
-        //     foreach (var result in results)
-        //     {
-        //         Movie movie = new Movie
-        //         {
-        //             Title = result.Name,
-        //             ImdbId = result.Id
-        //         };
-
-        //         // movie.locations[] = Array.CreateInstance(string, 4);
-        //         // Array.Copy(result.Locations, movie.Locations, 3);
-
-                
-        //         // foreach (var provider in Locations)
-        //         // {
-        //         //     movie.
-        //         // }
-        //     }
-
-        //     return userSearch;
-        // }
     }
 }

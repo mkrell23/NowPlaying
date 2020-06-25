@@ -113,29 +113,7 @@ Type the name of the movie you want to search for:
         }
 
         // Helper method to get and return user input to select proper result
-
-        // public static int UserPicksResult(List<Movie> userSearch)
-        // {
-        //     int userSelect = -1;
-        //     int userNumber;
-        //     Console.WriteLine("Please type the number of the result you'd like to select:");
-        //     try
-        //     {
-        //             userNumber = int.Parse(Console.ReadLine());
-        //             userSelect = userNumber - 1;
-        //     }
-        //     catch (FormatException e)
-        //     {
-        //         Console.WriteLine(e.Message);
-        //     }
-        //     // if (int.TryParse(rawNumber, out userNumber))
-        //     // {
-        //     //     userSelect = userNumber - 1;
-        //     // }
-            
-        //     return userSelect;
-        // }
-
+        // TODO: Add validation!!!
         public static int UserPicksResult()
         {
             int userSelect = -1;
@@ -150,37 +128,21 @@ Type the name of the movie you want to search for:
             {
                 Console.WriteLine(e.Message);
             }
-            // if (int.TryParse(rawNumber, out userNumber))
-            // {
-            //     userSelect = userNumber - 1;
-            // }
-            
             return userSelect;
         }
 
+        // Give the final list of addresses to find the selected media
         public static void DisplayStreamingLocations(UtellyResultById.Collection resultToDisplay)
         {
             Console.Clear();
             StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
             foreach (var location in resultToDisplay.Locations)
             {
-                display.AppendFormat($"\r\n\r\n\t{location.Name}\r\n\t{location.Url}");
+                // I don't know why "IVAUS" is added to the name of providers but I don't like it
+                display.AppendFormat($"\r\n\r\n\t{location.Name.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}");
             }
 
             Console.WriteLine(display);
-        }
-
-        // public static void DisplayStreamingLocations(Result[] resultToDisplay)
-        // {
-        //     StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
-        //     foreach (var location in resultToDisplay.Locations)
-        //     {
-        //         display.AppendFormat($"\r\n\t{location.Name}\r\n\t{location.Url}");
-        //     }
-
-        //     Console.WriteLine(display);
-        // }
-
-        
+        }        
     }
 }

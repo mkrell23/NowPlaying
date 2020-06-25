@@ -13,8 +13,7 @@ namespace NowPlaying
         private static string _utellyKey;
         private static string _omdbKey;
 
-        //Initializes the API keys in the Key files into the class
-
+        //Initializes the API keys in the key files into the class
         static WebInteraction()
         {
             using (StreamReader utellykey = new StreamReader("UtellyKey.txt") )
