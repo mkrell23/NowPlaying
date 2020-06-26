@@ -56,7 +56,7 @@ Type the name of the movie you want to search for:
             return Console.ReadLine();
         }
 
-        // Displays results to user, prompts for selection, and returns IMDB number for movie
+        // Takes list of movies and displays results to user, prompts for selection, and returns IMDB number for movie
         public static string DisplayAndReturnSelection(string movieChoice, List<Movie> userSearch)
         {
             Console.Clear();
@@ -65,6 +65,7 @@ Type the name of the movie you want to search for:
             for (int i = 0; i < userSearch.Count; i++)
             {
                 display.AppendFormat($"\r\n\r\n[{i+1}]: {userSearch[i].Title}");
+                // Displaying results as "N/A" is ugly and useless
                 if (userSearch[i].Director != "N/A")
                 {
                     display.AppendFormat($", directed by {userSearch[i].Director}");
@@ -84,17 +85,14 @@ Type the name of the movie you want to search for:
                 foreach (var rating in userSearch[i].Ratings)
                 {
                     display.AppendFormat($"\r\n\t\t{rating.Source}, {rating.Value}");
-                    
                 }
             }
-
-            Console.WriteLine(display + "\r\n\r\n");
-    
+            Console.WriteLine(display + "\r\n\r\n");   
             int userSelection =  UserPicksResult();
-
             return userSearch[userSelection].ImdbId;
         }
 
+        // Overload of method taking the Utelly Result[] instead of the earlier generated list of movies
         public static string DisplayAndReturnSelection(string movieChoice, Result[] userSearch)
         {
             Console.Clear();
@@ -141,7 +139,6 @@ Type the name of the movie you want to search for:
                 // I don't know why "IVAUS" is added to the name of providers but I don't like it
                 display.AppendFormat($"\r\n\r\n\t{location.Name.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}");
             }
-
             Console.WriteLine(display);
         }        
     }
