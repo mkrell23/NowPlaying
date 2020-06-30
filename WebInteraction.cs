@@ -99,8 +99,7 @@ namespace NowPlaying
             return result;
         }
 
-        //TODO: Move this to proper class?
-        public static void SaveMovieToFile(String movie, string fileName)
+        public static void SaveMovieToFile(object movie, string fileName)
         {
             var serializer = new JsonSerializer();
             using (StreamWriter writer = new StreamWriter(fileName))
