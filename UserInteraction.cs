@@ -7,6 +7,7 @@ namespace NowPlaying
     //This holds the code that the user interface is built from.
     class UserInteraction
     {
+        // DisplayWelcome seems to be surperfluous. Delete?
         public static void DisplayWelcome()
         {
             Console.WriteLine(@"
@@ -25,10 +26,10 @@ namespace NowPlaying
 | _|      |_______/__/     \__\  |__|     |__| |__| \__|  \______| 
 __________________________________________________________________
 
-Find what streaming provider is serving a movie!
+Find what streaming provider is serving a movie or show!
 
-Press any key to start
-Press the ESC key at any tme to exit");
+Press ESC to quit
+Press any other key to start");
 
         }
 
@@ -89,6 +90,11 @@ Type the name of the movie you want to search for:
             }
             Console.WriteLine(display + "\r\n\r\n");   
             int userSelection =  UserPicksResult();
+            while (userSelection >= userSearch.Count || userSelection < 0)
+            {
+                Console.WriteLine("Selection is out of range, please pick again");
+                userSelection =  UserPicksResult();
+            }
             return userSearch[userSelection].ImdbId;
         }
 
@@ -111,21 +117,18 @@ Type the name of the movie you want to search for:
         }
 
         // Helper method to get and return user input to select proper result
-        // TODO: Add validation!!!
         public static int UserPicksResult()
         {
+            int midNumber;
             int userSelect = -1;
-            int userNumber;
             Console.WriteLine("Please type the number of the result you'd like to select:");
-            try
+            var userNumber = Console.ReadLine();
+            while (!int.TryParse(userNumber, out midNumber))
             {
-                    userNumber = int.Parse(Console.ReadLine());
-                    userSelect = userNumber - 1;
+                Console.WriteLine("Please input a number");
+                userNumber = Console.ReadLine();
             }
-            catch (FormatException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            userSelect = midNumber - 1;
             return userSelect;
         }
 
@@ -133,13 +136,20 @@ Type the name of the movie you want to search for:
         public static void DisplayStreamingLocations(UtellyResultById.Collection resultToDisplay)
         {
             Console.Clear();
-            StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
-            foreach (var location in resultToDisplay.Locations)
+            if (resultToDisplay.Locations.Count == 0 )
             {
-                // I don't know why "IVAUS" is added to the name of providers but I don't like it
-                display.AppendFormat($"\r\n\r\n\t{location.Name.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}");
+                Console.WriteLine("No results streaming");
             }
-            Console.WriteLine(display);
+            else
+            {
+                StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
+                foreach (var location in resultToDisplay.Locations)
+                {
+                    // I don't know why "IVAUS" is added to the name of providers but I don't like it
+                    display.AppendFormat($"\r\n\r\n\t{location.Name.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}");
+                }
+                Console.WriteLine(display);
+            }
         }        
     }
 }

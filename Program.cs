@@ -6,43 +6,50 @@ namespace NowPlaying
 {
     class Program
     {
-        static int Main(string[] args)
+        static void Main(string[] args)
         {
+            List<Movie> searchedMovieList = new List<Movie>();
 
-          // MAIN LOOP GOES HERE IN THE FUTURE
+            while (true)
+                {
+                    Console.Clear();    
+                    
+                // Ask for and get movie to search
+                    var movieChoice = UserInteraction.GetSearchFromUser();
 
-            // UserInteraction.DisplayWelcome();
-            
-            // var selection = Console.ReadKey();
-            // if (selection.Key == ConsoleKey.Escape)
-            // {
-            //     return 0;
-            // }
-            // else
-            // {      
-            //     Console.Clear();    
-            //     movieChoice = UserInteraction.MainMenu();
-            // }
+                // Perform serch on OMDB
+                    Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
+                // Put results into a list of movies with titles, directors, ratings, etc
+                    searchedMovieList = CreateOmdbListOfResults(OmdbSearchResults);
 
-            List<Movie> userSearch = new List<Movie>();
-            
-            var movieChoice = UserInteraction.GetSearchFromUser();
-        
-            Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
+                // Display results and ask for user to select one
+                    var selectedId = UserInteraction.DisplayAndReturnSelection(movieChoice, searchedMovieList);
+                // Search for and display streaming providers for selection using Utelly
+                    var oneToStream = WebInteraction.SearchUtellyById(selectedId);
+                    UserInteraction.DisplayStreamingLocations(oneToStream);
 
-            userSearch = CreateOmdbListOfResults(OmdbSearchResults);
-
-            var selectedId = UserInteraction.DisplayAndReturnSelection(movieChoice, userSearch);
-
-            var oneToStream = WebInteraction.SearchUtellyById(selectedId);
-
-            UserInteraction.DisplayStreamingLocations(oneToStream);
-
-            //This is a handy spot to put a breakpoint for now because currently there is no graceful exit
-            WebInteraction.PrintKeys();
-
-            return 0;
+                // Search again, save results to file, or exit?
+                    Console.WriteLine("\r\n\r\nWould you like to search for another?\r\nType \"1\" to search again, type \"2\" to save results to file (NOT WORKING). Type \"3\" (or anything else) to quit.");
+                    var menuChoice = Console.ReadLine();
+                    switch (menuChoice)
+                    {
+                        case "1":
+                            continue;
+                        case "2":
+                            //SAVE TO FILE!!! NOT WORKING RIGHT NOW!!
+                            Console.WriteLine("Please type filename to save to (one word please)");
+                            var userFileName = Console.ReadLine();
+                            WebInteraction.SaveMovieToFile(oneToStream.Locations[0].Url, userFileName);
+                            break;
+                        case "3":
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                }
         }
+
 
         // Generates the intial list of movies/shows we'll be using later to pick a result
         static List<Movie> CreateOmdbListOfResults(Search[] results)
