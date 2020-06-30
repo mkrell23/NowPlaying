@@ -145,9 +145,8 @@ Type the name of the movie you want to search for:
                 StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
                 foreach (var location in resultToDisplay.Locations)
                 {
-                    // I don't know why "IVAUS" is added to the name of providers but I don't like it
-                    display.AppendFormat($"\r\n\r\n\t{location.Name.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}");
-                }
+                    display.AppendFormat($"\r\n\r\n\t{location.DisplayName}\r\n\t{location.Url}");
+                } 
                 Console.WriteLine(display);
             }
         }        
