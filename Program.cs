@@ -14,7 +14,7 @@ namespace NowPlaying
                 {
                     Console.Clear();    
                     
-                // Ask for and get movie to search
+                // Ask for movie to search for
                     var movieChoice = UserInteraction.GetSearchFromUser();
 
                 // Perform serch on OMDB
@@ -29,21 +29,24 @@ namespace NowPlaying
                     UserInteraction.DisplayStreamingLocations(oneToStream);
 
                 // Search again, save results to file, or exit?
-                    Console.WriteLine("\r\n\r\nWould you like to search for another?\r\nType \"1\" to search again, type \"2\" to save results to file (NOT WORKING). Type \"3\" (or anything else) to quit.");
-                    var menuChoice = Console.ReadLine();
+                    Console.WriteLine("\r\n\r\nWould you like to search for another?\r\nType \"1\" to search again, type \"2\" to save results to JSON file. Type \"Q\" to quit.");
+                    var menuChoice = Console.ReadLine().ToUpper();
+                    while (menuChoice != "1" && menuChoice != "2" && menuChoice != "Q")
+                    {
+                        Console.WriteLine("Please enter 1 (search again), 2 (save to JSON file), or Q (quit)");
+                        menuChoice = Console.ReadLine().ToUpper();
+                    }
                     switch (menuChoice)
                     {
                         case "1":
                             continue;
                         case "2":
-                            //SAVE TO FILE!!! NOT WORKING RIGHT NOW!!
-                            Console.WriteLine("Please type filename to save to (one word please)");
+                            Console.WriteLine("Please type filename to save to using (one word, no extension)");
                             var userFileName = Console.ReadLine();
-                            WebInteraction.SaveMovieToFile(oneToStream.Locations[0].Url, userFileName);
+                            var realFileName = userFileName + ".json";
+                            WebInteraction.SaveMovieToFile(oneToStream, realFileName);
                             break;
-                        case "3":
-                            break;
-                        default:
+                        case "Q":
                             break;
                     }
                     break;
