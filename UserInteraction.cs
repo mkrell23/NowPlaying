@@ -7,10 +7,11 @@ namespace NowPlaying
     //This holds the code that the user interface is built from.
     class UserInteraction
     {
-        // DisplayWelcome seems to be surperfluous. Delete?
-        public static void DisplayWelcome()
+        private static string _banner;
+
+        static UserInteraction()
         {
-            Console.WriteLine(@"
+            _banner = @"
 .__   __.   ______   ____    __    ____ 
 |  \ |  |  /  __  \  \   \  /  \  /   / 
 |   \|  | |  |  |  |  \   \/    \/   /  
@@ -26,34 +27,19 @@ namespace NowPlaying
 | _|      |_______/__/     \__\  |__|     |__| |__| \__|  \______| 
 __________________________________________________________________
 
-Find what streaming provider is serving a movie or show!
+";
+        }
 
-Press ESC to quit
-Press any other key to start");
-
+        // DisplayWelcome seems to be surperfluous. Delete?
+        public static void DisplayWelcome()
+        {
+            Console.WriteLine(_banner + "Find what streaming provider is serving a movie or show!\r\nGet critic reviews!\r\n\r\nPress any key to start");
         }
 
         // Gets something to search for
         public static string GetSearchFromUser()
         {
-            Console.WriteLine(@"
-.__   __.   ______   ____    __    ____ 
-|  \ |  |  /  __  \  \   \  /  \  /   / 
-|   \|  | |  |  |  |  \   \/    \/   /  
-|  . `  | |  |  |  |   \            /   
-|  |\   | |  `--'  |    \    /\    /    
-|__| \__|  \______/      \__/  \__/     
-                                        
-.______    __          ___   ____    ____  __  .__   __.   _______ 
-|   _  \  |  |        /   \  \   \  /   / |  | |  \ |  |  /  _____|
-|  |_)  | |  |       /  ^  \  \   \/   /  |  | |   \|  | |  |  __  
-|   ___/  |  |      /  /_\  \  \_    _/   |  | |  . `  | |  | |_ | 
-|  |      |  `----./  _____  \   |  |     |  | |  |\   | |  |__| | 
-| _|      |_______/__/     \__\  |__|     |__| |__| \__|  \______| 
-__________________________________________________________________
-
-Type the name of the movie you want to search for:
-");
+            Console.WriteLine(_banner + "Type the name of the movie you want to search for:\r\n");
             return Console.ReadLine();
         }
 
@@ -145,7 +131,8 @@ Type the name of the movie you want to search for:
                 StringBuilder display = new StringBuilder($"Here are your results for {resultToDisplay.Name}:");
                 foreach (var location in resultToDisplay.Locations)
                 {
-                    display.AppendFormat($"\r\n\r\n\t{location.DisplayName}\r\n\t{location.Url}");
+                    // I don't know why "IVAUS" is added to the name of providers but I don't like it
+                    display.AppendFormat($"\r\n\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}");
                 } 
                 Console.WriteLine(display);
             }
