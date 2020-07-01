@@ -10,6 +10,10 @@ namespace NowPlaying
         {
             List<Movie> searchedMovieList = new List<Movie>();
 
+        // Hello there
+            UserInteraction.DisplayWelcome();
+            Console.ReadKey();
+
             while (true)
                 {
                     Console.Clear();    
@@ -29,11 +33,11 @@ namespace NowPlaying
                     UserInteraction.DisplayStreamingLocations(oneToStream);
 
                 // Search again, save results to file, or exit?
-                    Console.WriteLine("\r\n\r\nWould you like to search for another?\r\nType \"1\" to search again, type \"2\" to save results to JSON file. Type \"Q\" to quit.");
+                    Console.WriteLine("\r\n\r\nWould you like to search for another?\r\nType \"1\" to search again, type \"2\" to save result to JSON file. Type \"Q\" to quit.");
                     var menuChoice = Console.ReadLine().ToUpper();
                     while (menuChoice != "1" && menuChoice != "2" && menuChoice != "Q")
                     {
-                        Console.WriteLine("Please enter 1 (search again), 2 (save to JSON file), or Q (quit)");
+                        Console.WriteLine("Please enter 1 (search again), 2 (save result to JSON file), or Q (quit)");
                         menuChoice = Console.ReadLine().ToUpper();
                     }
                     switch (menuChoice)
@@ -60,7 +64,7 @@ namespace NowPlaying
             List<Movie> userSearch = new List<Movie>();
             foreach (var result in results)
             {
-                if(result.Type != "game") // This prevents nonsense results later
+                if(result.Type != "game") // This prevents garbage results later
                 {    
                     var newResults = WebInteraction.SearchOmdbForId(result.ImdbId);
                     Movie movie = new Movie
