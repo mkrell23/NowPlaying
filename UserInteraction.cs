@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace NowPlaying
 {
@@ -76,7 +77,7 @@ __________________________________________________________________
                 // Put results into a list of movies with titles, directors, ratings, etc
                 if (omdbSearchResults == null)
                 {
-                    // Getting null is usually a "too many results" error, so we'll find the one we probably want
+                    // Getting null is usually a "too many results" error, so we'll take what we get here
                     OmdbResult newOmdbResults = WebInteraction.SearchOmdbForTitle(movieChoice);
                     Movie movie = new Movie
                     {
@@ -140,7 +141,7 @@ __________________________________________________________________
         {
             Console.WriteLine(_banner + "Type the name of the movie you want to search for:");
             var input = Console.ReadLine().Trim();
-            while (input == "" || input == null)
+            while (string.IsNullOrWhiteSpace(input))
             {
                 Console.WriteLine("Please type something.");
                 input = Console.ReadLine().Trim();
@@ -275,16 +276,25 @@ __________________________________________________________________
         private static void UserSaveMovie(Movie saveThis)
         {
             Console.WriteLine("Please type filename to save to using (one word, no extension)");
-            var userFileName = Console.ReadLine();
-            var realFileName = userFileName + ".json";
-            MovieInteraction.SaveMovieToFile(saveThis, realFileName);
+            var fileName = Console.ReadLine() + ".json";
+            while(string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
+            {
+                Console.WriteLine("Please enter a valid filename with no extension");
+                fileName = Console.ReadLine() + ".json";;
+            }
+            MovieInteraction.SaveMovieToFile(saveThis, fileName);
         }
 
         private static void UserLoadMovie()
         {
             Console.WriteLine("Please type filename to load (no extension)");
-            var userFileName = Console.ReadLine();
-            var fileName = userFileName + ".json";
+            var fileName = Console.ReadLine() + ".json";
+            while(string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+            {
+                Console.WriteLine("Please enter a valid filename with no extension");
+                fileName = Console.ReadLine();
+            }
+
             var result = MovieInteraction.LoadMovieFromFile(fileName);
 
             Console.Clear();
