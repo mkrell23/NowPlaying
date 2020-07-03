@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -9,17 +8,6 @@ namespace NowPlaying
     // Parses when search is by ID
     public partial class UtellyResultById
     {
-        public class Location
-        {
-                public string Icon { get; set; }
-                public IList<string> Country { get; set; }
-                [JsonProperty("display_name")]
-                public string DisplayName { get; set; }
-                public string Name { get; set; }
-                public string Id { get; set; }
-                public string Url { get; set; }
-        }
-
         public class Imdb
         {
                 public string Url { get; set; }
@@ -36,7 +24,7 @@ namespace NowPlaying
                 public string Id { get; set; }
                 public string Picture { get; set; }
                 public string Name { get; set; }
-                public IList<Location> Locations { get; set; }
+                public Location[] Locations { get; set; }
                 public string Provider { get; set; }
                 public int Weight { get; set; }
                 public SourceIds Source_ids { get; set; }

@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
 using System.Web;
@@ -44,7 +43,7 @@ namespace NowPlaying
             return utellyResultConv.Results;
         }
 
-        public static UtellyResultById.Collection SearchUtellyById(string searchTerms)
+        public static UtellyResultById SearchUtellyById(string searchTerms)
         {
             var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup?country=US&source_id={searchTerms}&source=imdb");
             var request = new RestRequest(Method.GET);
@@ -54,7 +53,7 @@ namespace NowPlaying
 
             UtellyResultById utellyResultConv = UtellyResultById.FromJson(response.Content);
 
-            return utellyResultConv.collection;
+            return utellyResultConv;
         }
 
         public static OmdbResult SearchOmdbForTitle(string searchTerms)
@@ -99,14 +98,5 @@ namespace NowPlaying
             return result;
         }
 
-        public static void SaveMovieToFile(object movie, string fileName)
-        {
-            var serializer = new JsonSerializer();
-            using (StreamWriter writer = new StreamWriter(fileName))
-            using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
-            {
-                serializer.Serialize(writer, movie);               
-            }          
-        }
     }
 }
