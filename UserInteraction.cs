@@ -71,22 +71,47 @@ __________________________________________________________________
                 var movieChoice = GetSearchFromUser();
 
                 // Perform serch on OMDB
-                Search[] OmdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
+                Search[] omdbSearchResults = WebInteraction.SearchOmdbByString(movieChoice);
+
                 // Put results into a list of movies with titles, directors, ratings, etc
-                searchedMovieList = MovieInteraction.CreateOmdbListOfResults(OmdbSearchResults);
+                if (omdbSearchResults == null)
+                {
+                    // Getting null is usually a "too many results" error, so we'll find the one we probably want
+                    OmdbResult newOmdbResults = WebInteraction.SearchOmdbForTitle(movieChoice);
+                    Movie movie = new Movie
+                    {
+                        Title = newOmdbResults.Title,
+                        ImdbId = newOmdbResults.ImdbId, 
+                        Year = newOmdbResults.Year,
+                        Poster = newOmdbResults.Poster,
+                        Actors = newOmdbResults.Actors,
+                        Director = newOmdbResults.Director,
+                        ImdbRating = newOmdbResults.ImdbRating,
+                        Metascore = newOmdbResults.Metascore,
+                        Plot = newOmdbResults.Plot,
+                        Rated =  newOmdbResults.Rated,
+                        Ratings = newOmdbResults.Ratings,
+                    };
+                    searchedMovieList.Add(movie);
+                }
+                else
+                {
+                    searchedMovieList = MovieInteraction.CreateListOfOmdbResults(omdbSearchResults);
+                }
 
                 // Display results and ask for user to select one
                 var selectedMovie = DisplayAndReturnSelection(movieChoice, searchedMovieList);
-                // Search for and display streaming providers for selection using Utelly
-                var oneToStream = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
-                selectedMovie.Locations = oneToStream.collection.Locations;
+                // Search for streaming providers for selection using Utelly
+                var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
+                // Put streaming locations on our selected movie object
+                selectedMovie.Locations = utellyResult.collection.Locations;
 
                 Console.Clear();
                 Console.WriteLine($"Here are your results for {selectedMovie.Title}:"); 
                 DisplayStreamingLocations(selectedMovie);
 
                 // Search again, save results to file, or exit?
-                Console.WriteLine("\r\n\r\nWould you like to search for another?\r\nType \"1\" to search again, type \"2\" to save result to JSON file, type \"3\" to load a previous result.\r\nType \"Q\" to quit.");
+                Console.WriteLine("\r\n\r\nType \"1\" to search again, type \"2\" to save result to JSON file, type \"3\" to load a previous result.\r\nType \"Q\" to quit.");
                 var menuChoice = Console.ReadLine().ToUpper().Trim();
                 while (menuChoice != "1" && menuChoice != "2"  && menuChoice != "3" && menuChoice != "Q")
                 {
@@ -113,11 +138,11 @@ __________________________________________________________________
         // Gets something to search for
         private static string GetSearchFromUser()
         {
-            Console.WriteLine(_banner + "Type the name of the movie you want to search for:\r\n");
+            Console.WriteLine(_banner + "Type the name of the movie you want to search for:");
             var input = Console.ReadLine().Trim();
-            if (input == "" || input == null)
+            while (input == "" || input == null)
             {
-                Console.WriteLine("Please type something.\r\n");
+                Console.WriteLine("Please type something.");
                 input = Console.ReadLine().Trim();
             }
             return input;

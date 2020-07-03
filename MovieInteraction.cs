@@ -8,7 +8,7 @@ namespace NowPlaying
     class MovieInteraction
     {
         // Generates a list of movies/shows from OMDB results
-        public static List<Movie> CreateOmdbListOfResults(Search[] results)
+        public static List<Movie> CreateListOfOmdbResults(Search[] results)
         {
             List<Movie> userSearch = new List<Movie>();
             foreach (var result in results)
