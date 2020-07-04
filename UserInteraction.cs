@@ -39,7 +39,7 @@ __________________________________________________________________
         public static void MainMenu()
         {
             Console.Clear();
-            Console.WriteLine(_banner + "Type \"1\" to search for a movie.\r\nType \"2\" to load from a JSON file.\r\nType \"Q\" to quit.");
+            Console.WriteLine(_banner + "Type \"1\" to search for a movie.\r\nType \"2\" to load movies from a JSON file.\r\nType \"Q\" to quit.");
             var menuChoice = Console.ReadLine().ToUpper().Trim();
             while (menuChoice != "1" && menuChoice != "2" && menuChoice != "Q")
             {
@@ -55,7 +55,7 @@ __________________________________________________________________
                     break;
                 case "2":
                     // Load JSON file
-                    UserLoadMovie();
+                    UserLoadMovieList();
                     break;
                 case "Q":
                     break;
@@ -160,7 +160,7 @@ __________________________________________________________________
             return movies[userSelection];
         }
 
-        // Overload of method taking the Utelly Result[] instead of the earlier generated list of movies
+        // Method taking the Utelly Result[] instead of the now used OMDB list of movies
         // Not needed in current version of program, but useful in checking things are working
         private static string DisplayAndReturnSelection(string movieChoice, Result[] userSearch)
         {
@@ -210,11 +210,11 @@ __________________________________________________________________
                 DisplayStreamingLocations(selectedMovie);
 
                 // Search again, save results to file, return to results, or exit?
-                Console.WriteLine("\r\n\r\nType \"1\" to search again, type \"2\" to save result to JSON file, type \"3\" to load a previous result.\r\nType \"4\" to return to results.\r\nType \"Q\" to quit.");
+                Console.WriteLine("\r\n\r\nType \"1\" to search again, type \"2\" to save result to JSON file, type \"3\" to load previous results.\r\nType \"4\" to return to results.\r\nType \"Q\" to quit.");
                 var menuChoice = Console.ReadLine().ToUpper().Trim();
                 while (menuChoice != "1" && menuChoice != "2"  && menuChoice != "3" && menuChoice != "4" &&menuChoice != "Q")
                 {
-                    Console.WriteLine("Please enter 1 (search again), 2 (save result to JSON file), 3 (load result from file), 4 (return to results), or Q (quit)");
+                    Console.WriteLine("Please enter 1 (search again), 2 (save result to JSON file), 3 (load results from file), 4 (return to results), or Q (quit)");
                     menuChoice = Console.ReadLine().ToUpper().Trim();
                 }
                 switch (menuChoice)
@@ -227,7 +227,7 @@ __________________________________________________________________
                         MainMenu();
                         break;
                     case "3":
-                        UserLoadMovie();
+                        UserLoadMovieList();
                         break;
                     case "4":
                         Console.Clear();
@@ -296,10 +296,17 @@ __________________________________________________________________
                 Console.WriteLine("Please enter a valid filename with no extension");
                 fileName = Console.ReadLine().Trim() + ".json";;
             }
-            MovieInteraction.SaveMovieToFile(saveThis, fileName);
+            if (!File.Exists(fileName))
+            {                
+                MovieInteraction.SaveMovieToFile(saveThis, fileName);
+            }
+            else
+            {
+                MovieInteraction.AddMovieToFile(saveThis, fileName);
+            }
         }
 
-        private static void UserLoadMovie()
+        private static void UserLoadMovieList()
         {
             Console.WriteLine("Please type filename to load (no extension)");
             var fileName = Console.ReadLine().Trim() + ".json";
@@ -308,13 +315,22 @@ __________________________________________________________________
                 Console.WriteLine("Please enter a valid filename with no extension");
                 fileName = Console.ReadLine().Trim();
             }
+            while (!File.Exists(fileName))
+            {
+                Console.WriteLine("File does not exist, please try again.");
+                fileName = Console.ReadLine().Trim();
+            }
 
-            var result = MovieInteraction.LoadMovieFromFile(fileName);
+            var movies = MovieInteraction.LoadMovieList(fileName);
 
             Console.Clear();
-            DisplayMovieInfo(result);
-            Console.WriteLine("\r\n\r\nStreaming Locations:");
-            DisplayStreamingLocations(result);
+            foreach (Movie movie in movies)
+            {
+                DisplayMovieInfo(movie);
+                Console.WriteLine("\r\nStreaming Locations:");
+                DisplayStreamingLocations(movie);
+                Console.WriteLine("\r\n--------------------------------------------------------------------\r\n");
+            }
 
             Console.WriteLine("\r\n\r\nType \"1\" to search for a movie, type \"2\" to load another file.\r\nType \"Q\" to quit.");
             var menuChoice = Console.ReadLine().ToUpper().Trim();
@@ -329,7 +345,7 @@ __________________________________________________________________
                     MainSearch();
                     break;
                 case "2":
-                    UserLoadMovie();
+                    UserLoadMovieList();
                     break;
                 case "Q":
                     break;

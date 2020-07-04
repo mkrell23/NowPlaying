@@ -39,11 +39,12 @@ namespace NowPlaying
 
         public static void SaveMovieToFile(Movie movie, string fileName)
         {
+            List<Movie> movies = new List<Movie>{movie};
             var serializer = new JsonSerializer();
             using (StreamWriter writer = new StreamWriter(fileName))
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
-                serializer.Serialize(writer, movie);               
+                serializer.Serialize(writer, movies);               
             }          
         }
 
@@ -76,8 +77,6 @@ namespace NowPlaying
 
         public static Movie LoadMovieFromFile(string fileName)
         {
-        
-        // TODO : Add file validation (Does it exist, etc)
             var movie = new Movie();
             var serializer = new JsonSerializer();
             using (var reader = new StreamReader(fileName))
