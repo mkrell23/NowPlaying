@@ -318,7 +318,7 @@ __________________________________________________________________
             while (!File.Exists(fileName))
             {
                 Console.WriteLine("File does not exist, please try again.");
-                fileName = Console.ReadLine().Trim();
+                fileName = Console.ReadLine().Trim() + ".json";
             }
 
             var movies = MovieInteraction.LoadMovieList(fileName);
