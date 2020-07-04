@@ -100,40 +100,9 @@ __________________________________________________________________
                     searchedMovieList = MovieInteraction.CreateListOfOmdbResults(omdbSearchResults);
                 }
 
-                // Display results and ask for user to select one
-                var selectedMovie = DisplayAndReturnSelection(movieChoice, searchedMovieList);
-                // Search for streaming providers for selection using Utelly
-                var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
-                // Put streaming locations on our selected movie object
-                selectedMovie.Locations = utellyResult.collection.Locations;
-
                 Console.Clear();
-                Console.WriteLine($"Here are your results for {selectedMovie.Title}:"); 
-                DisplayStreamingLocations(selectedMovie);
-
-                // Search again, save results to file, or exit?
-                Console.WriteLine("\r\n\r\nType \"1\" to search again, type \"2\" to save result to JSON file, type \"3\" to load a previous result.\r\nType \"Q\" to quit.");
-                var menuChoice = Console.ReadLine().ToUpper().Trim();
-                while (menuChoice != "1" && menuChoice != "2"  && menuChoice != "3" && menuChoice != "Q")
-                {
-                    Console.WriteLine("Please enter 1 (search again), 2 (save result to JSON file), or Q (quit)");
-                    menuChoice = Console.ReadLine().ToUpper().Trim();
-                }
-                switch (menuChoice)
-                {
-                    case "1":
-                        MainSearch();
-                        break;
-                    case "2":
-                        UserSaveMovie(selectedMovie);
-                        MainMenu();
-                        break;
-                    case "3":
-                        UserLoadMovie();
-                        break;
-                    case "Q":
-                        break;
-                }
+                Console.WriteLine($"You searched for {movieChoice}.\r\n\r\n");
+                ShowAndPickOmdbSearch(searchedMovieList);
         }
 
         // Gets something to search for
@@ -150,44 +119,45 @@ __________________________________________________________________
         }
 
         // Takes list of movies and displays results to user, prompts for selection, and returns IMDB number for movie
-        private static Movie DisplayAndReturnSelection(string movieChoice, List<Movie> userSearch)
+        private static Movie DisplayResultsReturnSelection(List<Movie> movies)
         {
-            Console.Clear();
-            StringBuilder display = new StringBuilder($"You searched for {movieChoice}.");
+            StringBuilder display = new StringBuilder();
 
-            for (int i = 0; i < userSearch.Count; i++)
+            for (int i = 0; i < movies.Count; i++)
             {
-                display.AppendFormat($"\r\n\r\n[{i+1}]: {userSearch[i].Title}");
+                display.AppendFormat($"[{i+1}]: {movies[i].Title}");
                 // Displaying results as "N/A" is ugly and useless
-                if (userSearch[i].Director != "N/A")
+                if (movies[i].Director != "N/A")
                 {
-                    display.AppendFormat($", directed by {userSearch[i].Director}");
+                    display.AppendFormat($", directed by {movies[i].Director}");
                 }
-                display.AppendFormat($", {userSearch[i].Year}.");
-                if (userSearch[i].Rated != "N/A")
+                display.AppendFormat($", {movies[i].Year}.");
+                if (movies[i].Rated != "N/A")
                 {
-                    display.AppendFormat($" {userSearch[i].Rated}");
+                    display.AppendFormat($" {movies[i].Rated}");
                 }
-                if (userSearch[i].Plot != "N/A")
+                if (movies[i].Plot != "N/A")
                 {
-                    display.AppendFormat($" \r\n\t{userSearch[i].Plot}");
+                    display.AppendFormat($" \r\n\t{movies[i].Plot}");
                 }
-                display.AppendFormat($"\r\n\tStarring: {userSearch[i].Actors}\r\n\tCritic Ratings: ");
+                display.AppendFormat($"\r\n\tStarring: {movies[i].Actors}\r\n\tCritic Ratings: ");
 
 
-                foreach (var rating in userSearch[i].Ratings)
+                foreach (var rating in movies[i].Ratings)
                 {
                     display.AppendFormat($"\r\n\t\t{rating.Source}, {rating.Value}");
                 }
+
+                display.Append("\r\n\r\n");
             }
-            Console.WriteLine(display + "\r\n\r\n");   
+            Console.WriteLine(display);   
             int userSelection =  UserPicksResult();
-            while (userSelection >= userSearch.Count || userSelection < 0)
+            while (userSelection >= movies.Count || userSelection < 0)
             {
                 Console.WriteLine("Selection is out of range, please pick again");
                 userSelection =  UserPicksResult();
             }
-            return userSearch[userSelection];
+            return movies[userSelection];
         }
 
         // Overload of method taking the Utelly Result[] instead of the earlier generated list of movies
@@ -224,6 +194,50 @@ __________________________________________________________________
             }
             userSelect = midNumber - 1;
             return userSelect;
+        }
+
+        private static List<Movie> ShowAndPickOmdbSearch(List<Movie> movies)
+        {
+            // Display results and ask for user to select one
+                var selectedMovie = DisplayResultsReturnSelection(movies);
+                // Search for streaming providers for selection using Utelly
+                var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
+                // Put streaming locations on our selected movie object
+                selectedMovie.Locations = utellyResult.collection.Locations;
+
+                Console.Clear();
+                Console.WriteLine($"Here are your results for {selectedMovie.Title}:"); 
+                DisplayStreamingLocations(selectedMovie);
+
+                // Search again, save results to file, return to results, or exit?
+                Console.WriteLine("\r\n\r\nType \"1\" to search again, type \"2\" to save result to JSON file, type \"3\" to load a previous result.\r\nType \"4\" to return to results.\r\nType \"Q\" to quit.");
+                var menuChoice = Console.ReadLine().ToUpper().Trim();
+                while (menuChoice != "1" && menuChoice != "2"  && menuChoice != "3" && menuChoice != "4" &&menuChoice != "Q")
+                {
+                    Console.WriteLine("Please enter 1 (search again), 2 (save result to JSON file), 3 (load result from file), 4 (return to results), or Q (quit)");
+                    menuChoice = Console.ReadLine().ToUpper().Trim();
+                }
+                switch (menuChoice)
+                {
+                    case "1":
+                        MainSearch();
+                        break;
+                    case "2":
+                        UserSaveMovie(selectedMovie);
+                        MainMenu();
+                        break;
+                    case "3":
+                        UserLoadMovie();
+                        break;
+                    case "4":
+                        Console.Clear();
+                        ShowAndPickOmdbSearch(movies);
+                        break;
+                    case "Q":
+                        break;
+                }
+
+            return movies;
         }
 
         // Give the list of addresses to find the selected media
@@ -276,11 +290,11 @@ __________________________________________________________________
         private static void UserSaveMovie(Movie saveThis)
         {
             Console.WriteLine("Please type filename to save to using (one word, no extension)");
-            var fileName = Console.ReadLine() + ".json";
+            var fileName = Console.ReadLine().Trim() + ".json";
             while(string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
             {
                 Console.WriteLine("Please enter a valid filename with no extension");
-                fileName = Console.ReadLine() + ".json";;
+                fileName = Console.ReadLine().Trim() + ".json";;
             }
             MovieInteraction.SaveMovieToFile(saveThis, fileName);
         }
@@ -288,11 +302,11 @@ __________________________________________________________________
         private static void UserLoadMovie()
         {
             Console.WriteLine("Please type filename to load (no extension)");
-            var fileName = Console.ReadLine() + ".json";
+            var fileName = Console.ReadLine().Trim() + ".json";
             while(string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             {
                 Console.WriteLine("Please enter a valid filename with no extension");
-                fileName = Console.ReadLine();
+                fileName = Console.ReadLine().Trim();
             }
 
             var result = MovieInteraction.LoadMovieFromFile(fileName);

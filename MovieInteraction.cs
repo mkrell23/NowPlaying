@@ -47,8 +47,37 @@ namespace NowPlaying
             }          
         }
 
+        public static void SaveMoviesToList(List<Movie> movies, string fileName)
+        {
+            var oldMovies = LoadMovieList(fileName);
+            foreach (Movie movie in oldMovies)
+            {
+                oldMovies.Add(movie);
+            }
+            var serializer = new JsonSerializer();
+            using (StreamWriter writer = new StreamWriter(fileName))
+            using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
+            {
+                serializer.Serialize(writer, oldMovies);               
+            }          
+        }
+
+        public static void AddMovieToFile(Movie movie, string fileName)
+        {
+            var oldMovies = LoadMovieList(fileName);
+            oldMovies.Add(movie);
+            var serializer = new JsonSerializer();
+            using (StreamWriter writer = new StreamWriter(fileName))
+            using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
+            {
+                serializer.Serialize(writer, oldMovies);               
+            }          
+        }
+
         public static Movie LoadMovieFromFile(string fileName)
         {
+        
+        // TODO : Add file validation (Does it exist, etc)
             var movie = new Movie();
             var serializer = new JsonSerializer();
             using (var reader = new StreamReader(fileName))
@@ -58,6 +87,21 @@ namespace NowPlaying
                 return movie;
             }
 
+        }
+
+        public static List<Movie> LoadMovieList(string fileName)
+        {
+        // TODO : Add file validation (Does it exist, etc)
+            var movies = new List<Movie>();
+            var serializer = new JsonSerializer();
+            using (var reader = new StreamReader(fileName))
+            using (var jsonReader = new JsonTextReader(reader))
+            {
+
+                movies = serializer.Deserialize<List<Movie>>(jsonReader);
+                return movies;
+            }
+ 
         }
     }
 }
