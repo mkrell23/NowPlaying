@@ -39,21 +39,21 @@ __________________________________________________________________
         public static void MainMenu()
         {
             Console.Clear();
-            Console.WriteLine(_banner + "Type \"1\" to search for a movie.\r\nType \"2\" to load movies from a JSON file.\r\nType \"Q\" to quit.");
+            Console.WriteLine(_banner + "Type \"F\" to find a movie or show.\r\nType \"L\" to load a movie list from a JSON file.\r\nType \"Q\" to quit.");
             var menuChoice = Console.ReadLine().ToUpper().Trim();
-            while (menuChoice != "1" && menuChoice != "2" && menuChoice != "Q")
+            while (menuChoice != "F" && menuChoice != "L" && menuChoice != "Q")
             {
-                Console.WriteLine("Please enter 1 (search), 2 (load a JSON file), or Q (quit)");
+                Console.WriteLine("Please enter F (search), L (load a JSON file), or Q (quit)");
                 menuChoice = Console.ReadLine().ToUpper().Trim();
             }
             
             switch(menuChoice)
             {
-                case "1":
+                case "F":
                     // Main Search Program
                     MainSearch();
                     break;
-                case "2":
+                case "L":
                     // Load JSON file
                     UserLoadMovieList();
                     break;
@@ -210,26 +210,26 @@ __________________________________________________________________
                 DisplayStreamingLocations(selectedMovie);
 
                 // Search again, save results to file, return to results, or exit?
-                Console.WriteLine("\r\n\r\nType \"1\" to search again, type \"2\" to save result to JSON file, type \"3\" to load previous results.\r\nType \"4\" to return to results.\r\nType \"Q\" to quit.");
+                Console.WriteLine("\r\n\r\nType \"F\" to find another movie or show, type \"S\" to save result to a movie list file, type \"L\" to load a previous list.\r\nType \"R\" to return to results.\r\nType \"Q\" to quit.");
                 var menuChoice = Console.ReadLine().ToUpper().Trim();
-                while (menuChoice != "1" && menuChoice != "2"  && menuChoice != "3" && menuChoice != "4" &&menuChoice != "Q")
+                while (menuChoice != "F" && menuChoice != "S"  && menuChoice != "L" && menuChoice != "R" &&menuChoice != "Q")
                 {
-                    Console.WriteLine("Please enter 1 (search again), 2 (save result to JSON file), 3 (load results from file), 4 (return to results), or Q (quit)");
+                    Console.WriteLine("Please enter F (find another), S (save result to a list), L (load list from file), R (return to results), or Q (quit)");
                     menuChoice = Console.ReadLine().ToUpper().Trim();
                 }
                 switch (menuChoice)
                 {
-                    case "1":
+                    case "F":
                         MainSearch();
                         break;
-                    case "2":
+                    case "S":
                         UserSaveMovie(selectedMovie);
                         MainMenu();
                         break;
-                    case "3":
+                    case "L":
                         UserLoadMovieList();
                         break;
-                    case "4":
+                    case "R":
                         Console.Clear();
                         ShowAndPickOmdbSearch(movies);
                         break;
@@ -332,19 +332,19 @@ __________________________________________________________________
                 Console.WriteLine("\r\n--------------------------------------------------------------------\r\n");
             }
 
-            Console.WriteLine("\r\n\r\nType \"1\" to search for a movie, type \"2\" to load another file.\r\nType \"Q\" to quit.");
+            Console.WriteLine("\r\n\r\nType \"F\" to find a movie or show, type \"L\" to load another file.\r\nType \"Q\" to quit.");
             var menuChoice = Console.ReadLine().ToUpper().Trim();
-            while (menuChoice != "1" && menuChoice != "2"  && menuChoice != "3" && menuChoice != "Q")
+            while (menuChoice != "F" && menuChoice != "L" && menuChoice != "Q")
             {
-                Console.WriteLine("Please enter 1 (search), 2 (load a file), or Q (quit)");
+                Console.WriteLine("Please enter F (find something), L (load a file), or Q (quit)");
                 menuChoice = Console.ReadLine().ToUpper().Trim();
             }
             switch (menuChoice)
             {
-                case "1":
+                case "F":
                     MainSearch();
                     break;
-                case "2":
+                case "L":
                     UserLoadMovieList();
                     break;
                 case "Q":
