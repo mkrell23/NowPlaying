@@ -43,7 +43,7 @@ __________________________________________________________________
             var menuChoice = Console.ReadLine().ToUpper().Trim();
             while (menuChoice != "F" && menuChoice != "L" && menuChoice != "Q")
             {
-                Console.WriteLine("Please enter F (search), L (load a JSON file), or Q (quit)");
+                Console.WriteLine("Please enter F (Find a movie), L (Load a JSON file), or Q (Quit)");
                 menuChoice = Console.ReadLine().ToUpper().Trim();
             }
             
@@ -122,8 +122,8 @@ __________________________________________________________________
         private static Movie DisplayResultsReturnSelection(List<Movie> movies)
         {
             Console.WriteLine(DisplayMovieInfo(movies));
-               
-            int userSelection =  UserPicksResult();
+            int userSelection;
+            userSelection =  UserPicksResult();
             while (userSelection >= movies.Count || userSelection < 0)
             {
                 Console.WriteLine("Selection is out of range, please pick again");
@@ -167,7 +167,7 @@ __________________________________________________________________
                 var menuChoice = Console.ReadLine().ToUpper().Trim();
                 while (menuChoice != "F" && menuChoice != "S"  && menuChoice != "L" && menuChoice != "R" &&menuChoice != "Q")
                 {
-                    Console.WriteLine("Please enter F (find another), S (save result to a list), L (load list from file), R (return to results), or Q (quit)");
+                    Console.WriteLine("Please enter F (Find another), S (Save result to a list), L (Load list from file), R (Return to results), or Q (quit)");
                     menuChoice = Console.ReadLine().ToUpper().Trim();
                 }
                 switch (menuChoice)
@@ -256,52 +256,76 @@ __________________________________________________________________
 
         private static void UserSaveMovie(Movie saveThis)
         {
-            Console.WriteLine("Please type filename to save to using (one word, no extension)");
-            var fileName = Console.ReadLine().Trim() + ".json";
+            Console.WriteLine("Please type filename to save to using (one word, no extension) or \"Q\" to return to menu.");
+            var fileName = Console.ReadLine().Trim();
+
+            if (fileName.ToUpper() == "Q") { return;}                
             while(string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) > 0)
             {
-                Console.WriteLine("Please enter a valid filename with no extension");
-                fileName = Console.ReadLine().Trim() + ".json";;
+                if (fileName.ToUpper() == "Q") { return; }
+                Console.WriteLine("Please enter a valid filename with no extension or \"Q\" to return");
+                fileName = Console.ReadLine().Trim();
             }
-            if (!File.Exists(fileName))
-            {                
-                MovieInteraction.SaveMovieToFile(saveThis, fileName);
+            if (!File.Exists(fileName + ".json") && fileName != "Q")
+            {
+                MovieInteraction.SaveMovieToFile(saveThis, (fileName + ".json"));
             }
             else
             {
-                MovieInteraction.AddMovieToFile(saveThis, fileName);
+                if (fileName.ToUpper() == "Q")
+                { return;}
+                MovieInteraction.AddMovieToFile(saveThis, (fileName + ".json"));
             }
+        }
+
+        private static void UserSaveMovieList(List<Movie> movies)
+        {
+
         }
 
         private static void UserLoadMovieList()
         {
-            Console.WriteLine("Please type filename to load (no extension)");
-            var fileName = Console.ReadLine().Trim() + ".json";
-            while(string.IsNullOrWhiteSpace(fileName) || fileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
-            {
-                Console.WriteLine("Please enter a valid filename with no extension");
-                fileName = Console.ReadLine().Trim();
-            }
-            while (!File.Exists(fileName))
-            {
-                Console.WriteLine("File does not exist, please try again.");
-                fileName = Console.ReadLine().Trim() + ".json";
-            }
+            Console.WriteLine("Please type filename to load (no extension) or \"Q\" to return to menu");
+            var fileName = Console.ReadLine().Trim();
 
-            var movies = MovieInteraction.LoadMovieList(fileName);
+            if (fileName.ToUpper() == "Q") { MainMenu();}
+
+            while (!File.Exists(fileName + ".json"))
+            {
+                if (fileName.ToUpper() == "Q") { MainMenu();}
+                Console.WriteLine("File does not exist, please try again or type \"Q\" to return to menu.");
+                fileName = Console.ReadLine().Trim();
+                while(string.IsNullOrWhiteSpace(fileName) || (fileName + ".json").IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                {
+                    if (fileName.ToUpper() == "Q") { MainMenu();}
+                    Console.WriteLine("Please enter a valid filename with no extension or \"Q\" to return to menu");
+                    fileName = Console.ReadLine().Trim();
+                }
+            }
+            var movies = MovieInteraction.LoadMovieList(fileName + ".json");
 
             Console.Clear();
             Console.WriteLine(DisplayMovieInfo(movies));
 
-            Console.WriteLine("\r\nType \"F\" to find a movie or show, type \"L\" to load another file.\r\nType \"Q\" to quit.");
+            Console.WriteLine("\r\nType \"S\" to save movie to a different file, type \"D\" to Delete movie from list, type \"F\" to find a movie or show, type \"L\" to load another file.\r\nType \"Q\" to quit.");
             var menuChoice = Console.ReadLine().ToUpper().Trim();
-            while (menuChoice != "F" && menuChoice != "L" && menuChoice != "Q")
+            while (menuChoice != "S" && menuChoice != "D" && menuChoice != "F" && menuChoice != "L" && menuChoice != "Q")
             {
-                Console.WriteLine("Please enter F (find something), L (load a file), or Q (quit)");
+                Console.WriteLine("Please enter S (Save movie to different file), D (Delete a movie), F (Find a movie), L (Load a file), or Q (Quit)");
                 menuChoice = Console.ReadLine().ToUpper().Trim();
             }
             switch (menuChoice)
             {
+    //TODO: MAKE FILE STUFF WORK RIGHT
+                case "S":
+                    int i = UserPicksResult();
+                    UserSaveMovie(movies[i]);
+                    break;
+                case "D":
+                    i = UserPicksResult();
+                    movies.RemoveAt(i);
+                    MovieInteraction.SaveMoviesToList(movies, fileName + ".json");
+                    break;
                 case "F":
                     MainSearch();
                     break;
