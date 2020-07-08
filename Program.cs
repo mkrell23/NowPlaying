@@ -12,7 +12,6 @@ namespace NowPlaying
 
             // Start the show
             UserInteraction.MainMenu();
-            
         }
     }
 }

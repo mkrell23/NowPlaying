@@ -33,7 +33,7 @@ __________________________________________________________________
 
         public static void DisplayWelcome()
         {
-            Console.WriteLine(_banner + "\tFind what streaming provider is serving a movie or show!\r\n\r\n\t\tGet critic reviews!\r\n\r\n\t\t\tPress any key to start");
+            Console.WriteLine(_banner + "\tFind what streaming provider is serving a movie or show!\r\n\r\n\t\tGet critic reviews!\r\n\r\n\t\t\tSave and load movie lists!\r\n\r\n\t\t\t\tPress any key to start");
         }
 
         public static void MainMenu()
@@ -121,36 +121,8 @@ __________________________________________________________________
         // Takes list of movies and displays results to user, prompts for selection, and returns IMDB number for movie
         private static Movie DisplayResultsReturnSelection(List<Movie> movies)
         {
-            StringBuilder display = new StringBuilder();
-
-            for (int i = 0; i < movies.Count; i++)
-            {
-                display.AppendFormat($"[{i+1}]: {movies[i].Title}");
-                // Displaying results as "N/A" is ugly and useless
-                if (movies[i].Director != "N/A")
-                {
-                    display.AppendFormat($", directed by {movies[i].Director}");
-                }
-                display.AppendFormat($", {movies[i].Year}.");
-                if (movies[i].Rated != "N/A")
-                {
-                    display.AppendFormat($" {movies[i].Rated}");
-                }
-                if (movies[i].Plot != "N/A")
-                {
-                    display.AppendFormat($" \r\n\t{movies[i].Plot}");
-                }
-                display.AppendFormat($"\r\n\tStarring: {movies[i].Actors}\r\n\tCritic Ratings: ");
-
-
-                foreach (var rating in movies[i].Ratings)
-                {
-                    display.AppendFormat($"\r\n\t\t{rating.Source}, {rating.Value}");
-                }
-
-                display.Append("\r\n\r\n");
-            }
-            Console.WriteLine(display);   
+            Console.WriteLine(DisplayMovieInfo(movies));
+               
             int userSelection =  UserPicksResult();
             while (userSelection >= movies.Count || userSelection < 0)
             {
@@ -158,25 +130,6 @@ __________________________________________________________________
                 userSelection =  UserPicksResult();
             }
             return movies[userSelection];
-        }
-
-        // Method taking the Utelly Result[] instead of the now used OMDB list of movies
-        // Not needed in current version of program, but useful in checking things are working
-        private static string DisplayAndReturnSelection(string movieChoice, Result[] userSearch)
-        {
-            Console.Clear();
-            StringBuilder display = new StringBuilder($"You searched for {movieChoice}.");
-
-            for (int i = 0; i < userSearch.Length; i++)
-            {
-                display.AppendFormat($"\r\n\r\n[{i+1}]: {userSearch[i].Name}");
-            }
-
-            Console.WriteLine(display + "\r\n\r\n");
-    
-            int userSelection =  UserPicksResult();
-
-            return userSearch[userSelection].ExternalIds.Imdb.Id;
         }
 
         // Helper method to get and return user input to select proper result
@@ -207,10 +160,10 @@ __________________________________________________________________
 
                 Console.Clear();
                 Console.WriteLine($"Here are your results for {selectedMovie.Title}:"); 
-                DisplayStreamingLocations(selectedMovie);
+                Console.WriteLine(DisplayStreamingLocations(selectedMovie));
 
                 // Search again, save results to file, return to results, or exit?
-                Console.WriteLine("\r\n\r\nType \"F\" to find another movie or show, type \"S\" to save result to a movie list file, type \"L\" to load a previous list.\r\nType \"R\" to return to results.\r\nType \"Q\" to quit.");
+                Console.WriteLine("\r\nType \"F\" to find another movie or show, type \"S\" to save result to a movie list file, type \"L\" to load a previous list.\r\nType \"R\" to return to results.\r\nType \"Q\" to quit.");
                 var menuChoice = Console.ReadLine().ToUpper().Trim();
                 while (menuChoice != "F" && menuChoice != "S"  && menuChoice != "L" && menuChoice != "R" &&menuChoice != "Q")
                 {
@@ -241,11 +194,11 @@ __________________________________________________________________
         }
 
         // Give the list of addresses to find the selected media
-        private static void DisplayStreamingLocations(Movie resultToDisplay)
+        private static string DisplayStreamingLocations(Movie resultToDisplay)
         {
             if (resultToDisplay.Locations.Length == 0 )
             {
-                Console.WriteLine("No results streaming");
+                return "No results streaming";
             }
             else
             {
@@ -253,38 +206,52 @@ __________________________________________________________________
                 foreach (var location in resultToDisplay.Locations)
                 {
                     // I don't know why "IVAUS" is added to the name of providers but I don't like it
-                    display.AppendFormat($"\r\n\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}");
+                    display.AppendFormat($"\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}\r\n");
                 } 
-                Console.WriteLine(display);
+                
+                return display.ToString();
             }
         }
 
-        private static void DisplayMovieInfo(Movie movie)
+        private static string DisplayMovieInfo(List<Movie> movies)
         {
             StringBuilder display = new StringBuilder();
-            display.AppendFormat($"{movie.Title}");
-            // Displaying results as "N/A" is ugly and useless
-            if (movie.Director != "N/A")
-            {
-                display.AppendFormat($", directed by {movie.Director}");
-            }
-            display.AppendFormat($", {movie.Year}.");
-            if (movie.Rated != "N/A")
-            {
-                display.AppendFormat($" {movie.Rated}");
-            }
-            if (movie.Plot != "N/A")
-            {
-                display.AppendFormat($"\r\n\t{movie.Plot}");
-            }
-            display.AppendFormat($"\r\n\r\n\tStarring: {movie.Actors}\r\n\tCritic Ratings: ");
 
-            foreach (var rating in movie.Ratings)
+            for (int i = 0; i < movies.Count; i++)
             {
-                display.AppendFormat($"\r\n\r\n\t\t{rating.Source}, {rating.Value}");
-            }
+                display.AppendFormat($"[{i+1}]: {movies[i].Title}");
+                // Displaying results as "N/A" is ugly and useless
+                if (movies[i].Director != "N/A")
+                {
+                    display.AppendFormat($", directed by {movies[i].Director}");
+                }
+                display.AppendFormat($", {movies[i].Year}.");
+                if (movies[i].Rated != "N/A")
+                {
+                    display.AppendFormat($" {movies[i].Rated}");
+                }
+                if (movies[i].Plot != "N/A")
+                {
+                    display.AppendFormat($" \r\n\t{movies[i].Plot}");
+                }
+                display.AppendFormat($"\r\n\tStarring: {movies[i].Actors}\r\n\tCritic Ratings: ");
 
-            Console.WriteLine(display);
+
+                foreach (var rating in movies[i].Ratings)
+                {
+                    display.AppendFormat($"\r\n\t\t{rating.Source}, {rating.Value}");
+                }
+
+                display.Append("\r\n\r\n");
+
+                if (movies[i].Locations != null)
+                {
+                    display.Append("Streaming Locations:");
+                    display.Append(DisplayStreamingLocations(movies[i]));
+                    display.Append("\r\n--------------------------------------------------------------------\r\n\r\n");
+                }
+            }
+            return display.ToString();
         }
 
         private static void UserSaveMovie(Movie saveThis)
@@ -324,15 +291,9 @@ __________________________________________________________________
             var movies = MovieInteraction.LoadMovieList(fileName);
 
             Console.Clear();
-            foreach (Movie movie in movies)
-            {
-                DisplayMovieInfo(movie);
-                Console.WriteLine("\r\nStreaming Locations:");
-                DisplayStreamingLocations(movie);
-                Console.WriteLine("\r\n--------------------------------------------------------------------\r\n");
-            }
+            Console.WriteLine(DisplayMovieInfo(movies));
 
-            Console.WriteLine("\r\n\r\nType \"F\" to find a movie or show, type \"L\" to load another file.\r\nType \"Q\" to quit.");
+            Console.WriteLine("\r\nType \"F\" to find a movie or show, type \"L\" to load another file.\r\nType \"Q\" to quit.");
             var menuChoice = Console.ReadLine().ToUpper().Trim();
             while (menuChoice != "F" && menuChoice != "L" && menuChoice != "Q")
             {
