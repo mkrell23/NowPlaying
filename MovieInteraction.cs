@@ -50,8 +50,19 @@ namespace NowPlaying
 
         public static void SaveMoviesToList(List<Movie> movies, string fileName)
         {
+            var serializer = new JsonSerializer();
+            using (StreamWriter writer = new StreamWriter(fileName))
+            using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
+            {
+                serializer.Serialize(writer, movies);               
+            }
+        }
+
+        public static void AddMoviesToList(List<Movie> movies, string fileName)
+        {
             var oldMovies = LoadMovieList(fileName);
-            foreach (Movie movie in oldMovies)
+            
+            foreach (Movie movie in movies)
             {
                 oldMovies.Add(movie);
             }
@@ -60,7 +71,7 @@ namespace NowPlaying
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
                 serializer.Serialize(writer, oldMovies);               
-            }          
+            }        
         }
 
         public static void AddMovieToFile(Movie movie, string fileName)
@@ -75,22 +86,8 @@ namespace NowPlaying
             }          
         }
 
-        public static Movie LoadMovieFromFile(string fileName)
-        {
-            var movie = new Movie();
-            var serializer = new JsonSerializer();
-            using (var reader = new StreamReader(fileName))
-            using (var jsonReader = new JsonTextReader(reader))
-            {
-                movie = serializer.Deserialize<Movie>(jsonReader);
-                return movie;
-            }
-
-        }
-
         public static List<Movie> LoadMovieList(string fileName)
         {
-        // TODO : Add file validation (Does it exist, etc)
             var movies = new List<Movie>();
             var serializer = new JsonSerializer();
             using (var reader = new StreamReader(fileName))
