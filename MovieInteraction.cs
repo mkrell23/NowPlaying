@@ -50,21 +50,28 @@ namespace NowPlaying
 
         public static void SaveMoviesToList(List<Movie> movies, string fileName)
         {
-            var oldMovies = new List<Movie>();
-            
-            if (File.Exists(fileName))
-            {  oldMovies = LoadMovieList(fileName); }
-            
-            for (int i = 0; i < oldMovies.Count; i++)
-            {
-                movies.Insert(i, oldMovies[i]);
-            }
             var serializer = new JsonSerializer();
             using (StreamWriter writer = new StreamWriter(fileName))
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
                 serializer.Serialize(writer, movies);               
             }
+        }
+
+        public static void AddMoviesToList(List<Movie> movies, string fileName)
+        {
+            var oldMovies = LoadMovieList(fileName);
+            
+            foreach (Movie movie in movies)
+            {
+                oldMovies.Add(movie);
+            }
+            var serializer = new JsonSerializer();
+            using (StreamWriter writer = new StreamWriter(fileName))
+            using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
+            {
+                serializer.Serialize(writer, oldMovies);               
+            }        
         }
 
         public static void AddMovieToFile(Movie movie, string fileName)
@@ -77,19 +84,6 @@ namespace NowPlaying
             {
                 serializer.Serialize(writer, oldMovies);               
             }          
-        }
-
-        public static Movie LoadMovieFromFile(string fileName)
-        {
-            var movie = new Movie();
-            var serializer = new JsonSerializer();
-            using (var reader = new StreamReader(fileName))
-            using (var jsonReader = new JsonTextReader(reader))
-            {
-                movie = serializer.Deserialize<Movie>(jsonReader);
-                return movie;
-            }
-
         }
 
         public static List<Movie> LoadMovieList(string fileName)
