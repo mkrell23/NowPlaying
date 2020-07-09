@@ -26,8 +26,8 @@ namespace NowPlaying
         // This is a test method to make sure I'm getting the proper value
         public static void PrintKeys()
         {
-            Console.WriteLine( "Utelly Key: " + WebInteraction._utellyKey);
-            Console.WriteLine( "OMDB Key: " + WebInteraction._omdbKey);
+            Console.WriteLine( "Utelly Key: " + _utellyKey);
+            Console.WriteLine( "OMDB Key: " + _omdbKey);
         }
 
         public static Result[] SearchUtelly(string searchTerms)
@@ -35,7 +35,7 @@ namespace NowPlaying
             var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup?term={searchTerms}&country=us");
             var request = new RestRequest(Method.GET);
             request.AddHeader("x-rapidapi-host", "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com");
-            request.AddHeader("x-rapidapi-key", WebInteraction._utellyKey);
+            request.AddHeader("x-rapidapi-key", _utellyKey);
             IRestResponse response = client.Execute(request);
 
             UtellyResult utellyResultConv = UtellyResult.FromJson(response.Content);
@@ -48,7 +48,7 @@ namespace NowPlaying
             var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup?country=US&source_id={searchTerms}&source=imdb");
             var request = new RestRequest(Method.GET);
             request.AddHeader("x-rapidapi-host", "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com");
-            request.AddHeader("x-rapidapi-key", WebInteraction._utellyKey);
+            request.AddHeader("x-rapidapi-key", _utellyKey);
             IRestResponse response = client.Execute(request);
 
             UtellyResultById utellyResultConv = UtellyResultById.FromJson(response.Content);
