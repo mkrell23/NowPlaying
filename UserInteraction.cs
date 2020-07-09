@@ -133,7 +133,7 @@ __________________________________________________________________
             selectedMovie.Locations = utellyResult.collection.Locations;
 
             Console.Clear();
-            Console.WriteLine($"Here are your results for {selectedMovie.Title}:"); 
+            Console.WriteLine($"Here are your results for {selectedMovie.Title}:\r\n\r\n"); 
             Console.WriteLine(DisplayStreamingLocations(selectedMovie));
 
             // Search again, save results to file, return to results, or exit?
@@ -214,7 +214,11 @@ __________________________________________________________________
         // Give the list of addresses to find the selected media
         private static string DisplayStreamingLocations(Movie movie)
         {
-            if (movie.Locations.Length == 0 )
+            if (movie.Locations == null)
+            {
+                return "No Streams found.";
+            }
+            if (movie.Locations.Length == 0)
             {
                 return "No streams found.";
             }
