@@ -139,6 +139,9 @@ namespace NowPlaying
 
         [JsonProperty("url")]
         public object Url { get; set; }
+
+        [JsonProperty("country")]
+        public string[] Country { get; set; }
     }
 
     // These are all the methods to actually return something usable. Mostly auto-generated and then tweaked to actually work by me (helping or hurting?)

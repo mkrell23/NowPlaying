@@ -198,15 +198,18 @@ __________________________________________________________________
         {
             if (resultToDisplay.Locations.Length == 0 )
             {
-                return "No results streaming";
+                return "No streams found.";
             }
             else
             {
                 StringBuilder display = new StringBuilder();
                 foreach (var location in resultToDisplay.Locations)
                 {
-                    // I don't know why "IVAUS" is added to the name of providers but I don't like it
-                    display.AppendFormat($"\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}\r\n");
+                    if (location.Country[0] == "us")
+                    {
+                        // I don't know why "IVAUS" is added to the name of providers but I don't like it
+                        display.AppendFormat($"\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}\r\n");
+                    }
                 } 
                 
                 return display.ToString();
