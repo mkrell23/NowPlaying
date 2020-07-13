@@ -214,11 +214,7 @@ __________________________________________________________________
         // Give the list of addresses to find the selected media
         private static string DisplayStreamingLocations(Movie movie)
         {
-            if (movie.Locations == null)
-            {
-                return "No Streams found.";
-            }
-            if (movie.Locations.Length == 0)
+            if (movie.Locations == null || movie.Locations.Length == 0)
             {
                 return "No streams found.";
             }
