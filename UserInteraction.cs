@@ -309,6 +309,8 @@ __________________________________________________________________
         private static void UserListInteraction(List<Movie> movies, string fileName)
         {
             Console.Clear();
+
+            Console.WriteLine($"File Loaded: {fileName}.json\r\n\r\n");
             Console.WriteLine(DisplayMovieInfo(movies));
 
             Console.WriteLine("\r\nType \"S\" to save movie to a different file, type \"C\" to Copy list to another file, type \"D\" to Delete movie from list, or type \"R\" to Reload streaming providers for a result.\r\nType \"F\" to find a new movie or show, type \"L\" to load another file.\r\nType \"Q\" to quit.");
