@@ -8,7 +8,9 @@ namespace NowPlaying
     //This holds the code that the user interface is built from.
     class UserInteraction
     {
+
         private static string _banner;
+        private static string _extension = ".json";
 
         static UserInteraction()
         {
@@ -246,15 +248,15 @@ __________________________________________________________________
                 Console.WriteLine("Please enter a valid filename with no extension or \"Q\" to return");
                 fileName = Console.ReadLine().Trim();
             }
-            if (!File.Exists(fileName + ".json") && fileName != "Q")
+            if (!File.Exists(fileName + _extension) && fileName != "Q")
             {
-                MovieInteraction.SaveMovieToFile(movie, (fileName + ".json"));
+                MovieInteraction.SaveMovieToFile(movie, (fileName + _extension));
             }
             else
             {
                 if (fileName.ToUpper() == "Q")
                 { return;}
-                MovieInteraction.AddMovieToFile(movie, (fileName + ".json"));
+                MovieInteraction.AddMovieToFile(movie, (fileName + _extension));
             }
         }
 
@@ -270,15 +272,15 @@ __________________________________________________________________
                 Console.WriteLine("Please enter a valid filename with no extension or \"Q\" to return");
                 fileName = Console.ReadLine().Trim();
             }
-            if (!File.Exists(fileName + ".json") && fileName != "Q")
+            if (!File.Exists(fileName + _extension) && fileName != "Q")
             {
-                MovieInteraction.SaveMoviesToList(movies, (fileName + ".json"));
+                MovieInteraction.SaveMoviesToList(movies, (fileName + _extension));
             }
             else
             {
                 if (fileName.ToUpper() == "Q")
                 { return;}
-                MovieInteraction.AddMoviesToList(movies, (fileName + ".json"));
+                MovieInteraction.AddMoviesToList(movies, (fileName + _extension));
             }
         }
 
@@ -289,19 +291,19 @@ __________________________________________________________________
 
             if (fileName.ToUpper() == "Q") { MainMenu();}
 
-            while (!File.Exists(fileName + ".json"))
+            while (!File.Exists(fileName + _extension))
             {
                 if (fileName.ToUpper() == "Q") { MainMenu();}
                 Console.WriteLine("File does not exist, please try again or type \"Q\" to return to menu.");
                 fileName = Console.ReadLine().Trim();
-                while(string.IsNullOrWhiteSpace(fileName) || (fileName + ".json").IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                while(string.IsNullOrWhiteSpace(fileName) || (fileName + _extension).IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
                 {
                     if (fileName.ToUpper() == "Q") { MainMenu();}
                     Console.WriteLine("Please enter a valid filename with no extension or \"Q\" to return to menu");
                     fileName = Console.ReadLine().Trim();
                 }
             }
-            var movies = MovieInteraction.LoadMovieList(fileName + ".json");
+            var movies = MovieInteraction.LoadMovieList(fileName + _extension);
 
             UserListInteraction(movies, fileName);
         }
@@ -324,30 +326,45 @@ __________________________________________________________________
             {
                 case "S":
                     int i = UserPicksArray();
+                    while (i >= movies.Count || i < 0)
+                    {
+                        Console.WriteLine("Selection is out of range, please pick again");
+                        i =  UserPicksArray();
+                    }
                     UserSaveMovie(movies[i]);
-                    Console.WriteLine("Press any key to continue");
+                    Console.WriteLine("List may need to be reloaded. Press any key to continue");
                     Console.ReadKey();
                     UserListInteraction(movies, fileName);
                     break;
                 case "C":
                     UserSaveList(movies);
-                    Console.WriteLine("Press any key to continue");
+                    Console.WriteLine("List may need to be reloaded. Press any key to continue");
                     Console.ReadKey();
                     UserListInteraction(movies, fileName);
                     break;
                 case "D":
                     i = UserPicksArray();
+                    while (i >= movies.Count || i < 0)
+                    {
+                        Console.WriteLine("Selection is out of range, please pick again");
+                        i =  UserPicksArray();
+                    }
                     movies.RemoveAt(i);
-                    MovieInteraction.SaveMoviesToList(movies, fileName + ".json");
+                    MovieInteraction.SaveMoviesToList(movies, fileName + _extension);
                     Console.WriteLine("Press any key to continue");
                     Console.ReadKey();
                     UserListInteraction(movies, fileName);
                     break;
                 case "R":
                     i = UserPicksArray();
+                    while (i >= movies.Count || i < 0)
+                    {
+                        Console.WriteLine("Selection is out of range, please pick again");
+                        i =  UserPicksArray();
+                    }
                     var results = WebInteraction.SearchUtellyById(movies[i].ImdbId);
                     movies[i].Locations = results.collection.Locations;
-                    MovieInteraction.SaveMoviesToList(movies, fileName + ".json");
+                    MovieInteraction.SaveMoviesToList(movies, fileName + _extension);
                     Console.WriteLine("Press any key to continue");
                     Console.ReadKey();
                     UserListInteraction(movies, fileName);
