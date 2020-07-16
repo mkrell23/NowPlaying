@@ -44,7 +44,7 @@ namespace NowPlaying
             using (StreamWriter writer = new StreamWriter(fileName))
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
-                serializer.Serialize(writer, movies);               
+                serializer.Serialize(jsonWriter, movies);               
             }          
         }
 
@@ -54,7 +54,7 @@ namespace NowPlaying
             using (StreamWriter writer = new StreamWriter(fileName))
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
-                serializer.Serialize(writer, movies);               
+                serializer.Serialize(jsonWriter, movies);               
             }
         }
 
@@ -70,7 +70,7 @@ namespace NowPlaying
             using (StreamWriter writer = new StreamWriter(fileName))
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
-                serializer.Serialize(writer, oldMovies);               
+                serializer.Serialize(jsonWriter, oldMovies);               
             }        
         }
 
@@ -82,7 +82,7 @@ namespace NowPlaying
             using (StreamWriter writer = new StreamWriter(fileName))
             using (JsonTextWriter jsonWriter = new JsonTextWriter(writer))
             {
-                serializer.Serialize(writer, oldMovies);               
+                serializer.Serialize(jsonWriter, oldMovies);               
             }          
         }
 
