@@ -338,7 +338,7 @@ __________________________________________________________________
                     break;
                 case "C":
                     UserSaveList(movies);
-                    Console.WriteLine("List may need to be reloaded. Press any key to continue");
+                    Console.WriteLine("Press any key to continue");
                     Console.ReadKey();
                     UserListInteraction(movies, fileName);
                     break;
