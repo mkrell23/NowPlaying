@@ -14,4 +14,11 @@ Searches for movies or TV shows, displays a critic rating, and shows what (if an
 * Displays the provider of the selected movie in the console.
 * Saves and loads movies to JSON lists, including adding, deleting, and copying movies.
 
-User needs a key for the APIs used, saved in a text file. See the WebInteraction (and gitignore) code for details. Code Lou people: message me for said files.
+
+#### How To Use ####
+
+User needs API keys for both [OMDB](http://www.omdbapi.com/) and [Utelly](https://rapidapi.com/utelly/api/utelly), saved in their own text files and placed in the same base directory as the rest of the code. See the gitignore or WebInteraction initialization for filename details. Code Lou people: message me for said files.
+
+[http://www.omdbapi.com/](http://www.omdbapi.com/)
+
+[https://rapidapi.com/utelly/api/utelly](https://rapidapi.com/utelly/api/utelly)
