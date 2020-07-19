@@ -119,6 +119,13 @@ __________________________________________________________________
         private static List<Movie> ShowAndPickOmdbSearch(List<Movie> movies)
         {
             // Display results and ask for user to select one
+            if(movies[0].Title == null)
+            {
+                Console.WriteLine("No results found");
+                Console.WriteLine("Press any key to return to menu");
+                Console.ReadKey();
+                MainMenu();                
+            }
             Console.WriteLine(DisplayMovieInfo(movies));
             int userSelection;
             userSelection =  UserPicksArray();
