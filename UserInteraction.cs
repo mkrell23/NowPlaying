@@ -115,35 +115,31 @@ __________________________________________________________________
         }
 
 // TODO: Allow user to save result from OMDB list before Utelly search?
-// What would that flow look like? Would that be normal?
         private static List<Movie> ShowAndPickOmdbSearch(List<Movie> movies)
-        {
+        { 
+            Movie selectedMovie = null;
             // Display results and ask for user to select one
-            if(movies[0].Title == null)
-            {
-                Console.WriteLine("No results found");
-                Console.WriteLine("Press any key to return to menu");
-                Console.ReadKey();
-                MainMenu();                
-            }
             Console.WriteLine(DisplayMovieInfo(movies));
-            int userSelection;
-            userSelection =  UserPicksArray();
-            while (userSelection >= movies.Count || userSelection < 0)
+            if (movies.Count != 0 && movies[0].Title != null)
             {
-                Console.WriteLine("Selection is out of range, please pick again");
+                int userSelection;
                 userSelection =  UserPicksArray();
-            }
-            var selectedMovie = movies[userSelection];
-        
-            // Search for streaming providers for selection using Utelly
-            var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
-            // Put streaming locations on our selected movie object
-            selectedMovie.Locations = utellyResult.collection.Locations;
+                while (userSelection >= movies.Count || userSelection < 0)
+                {
+                    Console.WriteLine("Selection is out of range, please pick again");
+                    userSelection =  UserPicksArray();
+                }
+                selectedMovie = movies[userSelection];
+            
+                // Search for streaming providers for selection using Utelly
+                var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
+                // Put streaming locations on our selected movie object
+                selectedMovie.Locations = utellyResult.collection.Locations;
 
-            Console.Clear();
-            Console.WriteLine($"Here are your results for {selectedMovie.Title}:\r\n\r\n"); 
-            Console.WriteLine(DisplayStreamingLocations(selectedMovie));
+                Console.Clear();
+                Console.WriteLine($"Here are your results for {selectedMovie.Title}:\r\n\r\n"); 
+                Console.WriteLine(DisplayStreamingLocations(selectedMovie));
+            }
 
             // Search again, save results to file, return to results, or exit?
             Console.WriteLine("\r\nType \"F\" to find another movie or show, type \"S\" to save result to a list file, type \"L\" to load a previous list.\r\nType \"R\" to return to results, and type \"Q\" to quit.");
@@ -183,40 +179,57 @@ __________________________________________________________________
         {
             StringBuilder display = new StringBuilder();
 
-            for (int i = 0; i < movies.Count; i++)
+            // Nothing to see here?
+            if (movies == null || movies.Count == 0 || movies[0].Title == null)
             {
-                display.AppendFormat($"[{i+1}]: {movies[i].Title}");
-                // Displaying results as "N/A" is ugly and useless
-                if (movies[i].Director != "N/A")
-                {
-                    display.AppendFormat($", directed by {movies[i].Director}");
-                }
-                display.AppendFormat($", {movies[i].Year}.");
-                if (movies[i].Rated != "N/A")
-                {
-                    display.AppendFormat($" {movies[i].Rated}");
-                }
-                if (movies[i].Plot != "N/A")
-                {
-                    display.AppendFormat($" \r\n\t{movies[i].Plot}");
-                }
-                display.AppendFormat($"\r\n\tStarring: {movies[i].Actors}\r\n\tCritic Ratings: ");
-
-
-                foreach (var rating in movies[i].Ratings)
-                {
-                    display.AppendFormat($"\r\n\t\t{rating.Source}, {rating.Value}");
-                }
-
-                display.Append("\r\n\r\n");
-
-                if (movies[i].Locations != null)
-                {
-                    display.Append("Streaming Locations:");
-                    display.Append(DisplayStreamingLocations(movies[i]));
-                    display.Append("\r\n--------------------------------------------------------------------\r\n\r\n");
-                }
+                display.Append("No results found\r\n");                
             }
+            else
+            {
+                for (int i = 0; i < movies.Count; i++)
+                {
+                    if (movies[i] == null || movies[i].Title == null)
+                    {
+                        display.AppendFormat($"[{i+1}]: Null list item\r\n");
+                    }
+                    else
+                    {
+                        display.AppendFormat($"[{i+1}]: {movies[i].Title}");
+                        // Displaying results as "N/A" is ugly and useless
+                        if (movies[i].Director != "N/A")
+                        {
+                            display.AppendFormat($", directed by {movies[i].Director}");
+                        }
+                        display.AppendFormat($", {movies[i].Year}.");
+                        if (movies[i].Rated != "N/A")
+                        {
+                            display.AppendFormat($" {movies[i].Rated}");
+                        }
+                        if (movies[i].Plot != "N/A")
+                        {
+                            display.AppendFormat($" \r\n\t{movies[i].Plot}");
+                        }
+                        display.AppendFormat($"\r\n\tStarring: {movies[i].Actors}\r\n\tCritic Ratings: ");
+
+
+                        foreach (var rating in movies[i].Ratings)
+                        {
+                            display.AppendFormat($"\r\n\t\t{rating.Source}, {rating.Value}");
+                        }
+
+                        display.Append("\r\n\r\n");
+
+                        if (movies[i].Locations != null)
+                        {
+                            display.Append("Streaming Locations:\r\n");
+                            display.Append(DisplayStreamingLocations(movies[i]));
+                        }
+                    }
+
+                    display.Append("--------------------------------------------------------------------\r\n\r\n");
+                }
+            }  
+
             return display.ToString();
         }
 
