@@ -250,16 +250,11 @@ __________________________________________________________________
                 {
                 
                   //This is for search by ID when it returns odd non-US results.
-                    // if (location.Country[0] == "us")
-                    // {
-                    //     // I don't know why "IVAUS" is added to the name of providers but I don't like it
-                    //     display.AppendFormat($"\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}\r\n");
-                    // }
-
-                  //Search by title has no country parameter
-                           // I don't know why "IVAUS" is added to the name of providers but I don't like it
+                    if (location.Country == null || location.Country[0] == "us")
+                    {
+                        // I don't know why "IVAUS" is added to the name of providers but I don't like it
                         display.AppendFormat($"\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}\r\n");
-
+                    }
                 } 
                 
                 return display.ToString();
