@@ -131,10 +131,13 @@ __________________________________________________________________
                 }
                 selectedMovie = movies[userSelection];
             
-                // Search for streaming providers for selection using Utelly
-                var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
-                // Put streaming locations on our selected movie object
-                selectedMovie.Locations = utellyResult.collection.Locations;
+                // // Search for streaming providers for selection using Utelly
+                var utellyResult = WebInteraction.SearchUtelly(selectedMovie.Title);
+            // What is Utelly Doing? Search by ID not currently working
+                // var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
+                // // Put streaming locations on our selected movie object
+                // selectedMovie.Locations = utellyResult.collection.Locations;
+                selectedMovie.Locations = utellyResult[0].Locations;
 
                 Console.Clear();
                 Console.WriteLine($"Here are your results for {selectedMovie.Title}:\r\n\r\n"); 
@@ -245,11 +248,18 @@ __________________________________________________________________
                 StringBuilder display = new StringBuilder();
                 foreach (var location in movie.Locations)
                 {
-                    if (location.Country[0] == "us")
-                    {
-                        // I don't know why "IVAUS" is added to the name of providers but I don't like it
+                
+                  //This is for search by ID when it returns odd non-US results.
+                    // if (location.Country[0] == "us")
+                    // {
+                    //     // I don't know why "IVAUS" is added to the name of providers but I don't like it
+                    //     display.AppendFormat($"\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}\r\n");
+                    // }
+
+                  //Search by title has no country parameter
+                           // I don't know why "IVAUS" is added to the name of providers but I don't like it
                         display.AppendFormat($"\r\n\t{location.DisplayName.TrimEnd(new char[] {'I', 'V', 'A', 'U', 'S'})}\r\n\t{location.Url}\r\n");
-                    }
+
                 } 
                 
                 return display.ToString();
