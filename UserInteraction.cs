@@ -131,12 +131,12 @@ __________________________________________________________________
                 }
                 selectedMovie = movies[userSelection];
             
-                // // Search for streaming providers for selection using Utelly
-                var utellyResult = WebInteraction.SearchUtelly(selectedMovie.Title);
-            // What is Utelly Doing? Search by ID not currently working
+        // What is Utelly Doing? Search by ID not currently working
+            // Search for streaming providers for selection using Utelly
                 // var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
-                // // Put streaming locations on our selected movie object
+            // Put streaming locations on our selected movie object
                 // selectedMovie.Locations = utellyResult.collection.Locations;
+                var utellyResult = WebInteraction.SearchUtelly(selectedMovie.Title);
                 selectedMovie.Locations = utellyResult[0].Locations;
 
                 Console.Clear();
@@ -183,7 +183,7 @@ __________________________________________________________________
             StringBuilder display = new StringBuilder();
 
             // Nothing to see here?
-            if (movies == null || movies.Count == 0 || movies[0].Title == null)
+            if (movies == null || movies.Count == 0 )
             {
                 display.Append("No results found\r\n");                
             }
