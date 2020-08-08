@@ -131,13 +131,13 @@ __________________________________________________________________
                 }
                 selectedMovie = movies[userSelection];
             
-        // What is Utelly Doing? Search by ID not currently working
             // Search for streaming providers for selection using Utelly
-                // var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
+                var utellyResult = WebInteraction.SearchUtellyById(selectedMovie.ImdbId);
             // Put streaming locations on our selected movie object
-                // selectedMovie.Locations = utellyResult.collection.Locations;
-                var utellyResult = WebInteraction.SearchUtelly(selectedMovie.Title);
-                selectedMovie.Locations = utellyResult[0].Locations;
+                selectedMovie.Locations = utellyResult.collection.Locations;
+                //Can we search by ID? If not here we go:
+                // var utellyResult = WebInteraction.SearchUtelly(selectedMovie.Title);
+                // selectedMovie.Locations = utellyResult[0].Locations;
 
                 Console.Clear();
                 Console.WriteLine($"Here are your results for {selectedMovie.Title}:\r\n\r\n"); 
