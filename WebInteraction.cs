@@ -50,9 +50,10 @@ namespace NowPlaying
         }
 
         // This is the method we use to get our list of streaming providers using the IMDB ID
+        // Note: country code must be lowercase!
         public static UtellyResultById SearchUtellyById(string searchTerms)
         {
-            var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup?country=US&source_id={searchTerms}&source=imdb");
+            var client = new RestClient($"https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup?country=us&source_id={searchTerms}&source=imdb");
             var request = new RestRequest(Method.GET);
             request.AddHeader("x-rapidapi-host", "utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com");
             request.AddHeader("x-rapidapi-key", _utellyKey);
